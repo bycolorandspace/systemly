@@ -1,103 +1,235 @@
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import Image from "next/image";
+import {
+  ArrowUp,
+  Camera,
+  ImagePlusIcon,
+  LoaderPinwheelIcon,
+  // LoaderPinwheelIcon,
+  X,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [isUploading, setIsuploading] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) processFile(file);
+  };
+
+  const processFile = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+    }
+
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error("File size must be less than 5MB");
+    }
+
+    const url = URL.createObjectURL(file);
+
+    setSelectedFile(file);
+    setPreviewUrl(url);
+  };
+
+  // Handle drag and drop
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault(); // Prevent default behavior
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragOver(false);
+
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+      processFile(files[0]);
+    }
+  };
+
+  const analyseChart = async (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      setIsuploading(true);
+
+      const response = await fetch("/api/analyse-chart", {
+        method: "POST",
+        body: formData, // No Content-Type header needed
+      });
+      if (response) {
+        setIsuploading(false);
+        return response.json();
+      } else {
+        setIsuploading(false);
+        const errorMessage = "Issue with openAI response";
+        console.log(`Problem uploading image: ${errorMessage}`);
+        throw Error(errorMessage);
+      }
+    } catch (error) {
+      const errorMessage = error as string;
+
+      console.log(`Problem uploading image: ${errorMessage}`);
+      toast.error(`Problem uploading image: ${errorMessage}`);
+      setIsuploading(false);
+    }
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const removeImage = () => {
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    setSelectedFile(null);
+    setPreviewUrl("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  return (
+    <div className=" items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
+        <Image src="/logo-systemly.svg" alt="Logo" width={150} height={200} />
+        <Card className="px-8 py-4 max-w-2xl">
+          <div>
+            <h2 className="font-bold text-2xl">Upload a chart image</h2>
+            <p className="text-sm text-gray-500">
+              Upload a chart image to get started. We will extract the data from
+              the image and provide you with insights.
+            </p>
+          </div>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileSelect}
+            className="hidden"
+          />
+
+          <div className="mt-4">
+            {previewUrl ? (
+              <div className="relative">
+                <div className="relative w-full max-h-64 overflow-hidden rounded-lg">
+                  {isUploading && (
+                    <div className="absolute bg-black/70  overflow-hidden w-full h-full flex flex-col rounded-lg justify-center items-center gap-2">
+                      <div className="flex flex-row gap-2 items-center">
+                        <LoaderPinwheelIcon
+                          className="text-white animate-spin"
+                          size={18}
+                        />
+                        <p className="text-gwhite">Uploading...</p>
+                      </div>
+
+                      {/* <div className="w-full px-8">
+                        <Card className="progress-update flex flex-row gap-3 items-center p-4 bg-">
+                          <CheckCircle2Icon
+                            className="text-green-500 animate-collapsible-up"
+                            size={18}
+                          />
+                          <p className="text-gwhite">Uploading image</p>
+                        </Card>
+                      </div> */}
+                    </div>
+                  )}
+                  <Image
+                    src={previewUrl}
+                    alt="Upload"
+                    width={400}
+                    height={200}
+                    className="object-cover bg-gray-900 rounded-lg w-full max-h-64"
+                  />
+                </div>
+
+                <button
+                  onClick={removeImage}
+                  className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            ) : (
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={`flex flex-col items-center justify-center h-64 border-dashed border-4 rounded-lg gap-4 cursor-pointer transition-colors ${
+                  isDragOver
+                    ? "bg-blue-50 border-blue-400"
+                    : "bg-gray-900 border-gray-600"
+                }`}
+                onClick={handleUploadClick}
+              >
+                <ImagePlusIcon
+                  className={isDragOver ? "text-blue-500" : "text-gray-500"}
+                  size={64}
+                />
+                <p className={isDragOver ? "text-blue-500" : "text-gray-500"}>
+                  {isDragOver
+                    ? "Drop your image here"
+                    : "Drag and drop your image here"}
+                </p>
+                <p className="text-gray-500">or</p>
+                <Button variant="outline" onClick={handleUploadClick}>
+                  Upload Image
+                </Button>
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-row gap-4  w-full">
+            <div className="border rounded-lg px-4 py-2 flex flex-row justify-center items-center text-sm flex-1">
+              {selectedFile ? (
+                <p className="flex flex-row gap-2 items-center">
+                  {selectedFile.name}{" "}
+                  <Camera className="text-gray-500" size={16} />
+                </p>
+              ) : (
+                <p>Select an image to analyse</p>
+              )}
+            </div>
+            <Button
+              disabled={!selectedFile}
+              onClick={async () => {
+                if (selectedFile) {
+                  await analyseChart(selectedFile);
+                }
+              }}
+            >
+              Analyse <ArrowUp className="text-gray-500" size={32} />
+            </Button>
+          </div>
+        </Card>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
