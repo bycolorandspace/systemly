@@ -125,3 +125,134 @@
 //     monitoring: 'Watch for volume spikes and price action near levels'
 //   }
 // }
+
+// "exitStrategy": {
+//   "partialProfit": "take profits at what intervals",
+//   "stopAdjustment": "when and how to move stops",
+//   "breakeven": "when to move stop to breakeven",
+//   "trailMethod": "how to trail stops for max profit",
+//   "timeStop": "exit if nothing happens by when",
+//   "signalChange": "exit if setup invalidated how"
+// }
+
+// Separate Pre-Trading Psychology Questionnaire JSON
+// const preTradingQuestionnaire = {
+//   "questionnaire": {
+//     "title": "Pre-Trading Psychology Check",
+//     "description": "Complete this quick assessment before every trade to improve your success rate",
+//     "questions": [
+//       {
+//         "id": "emotional_state",
+//         "question": "How are you feeling right now?",
+//         "type": "single_choice",
+//         "options": [
+//           { "value": "calm", "label": "Calm and focused", "score": 10 },
+//           { "value": "excited", "label": "Excited about opportunities", "score": 7 },
+//           { "value": "anxious", "label": "Anxious or nervous", "score": 4 },
+//           { "value": "frustrated", "label": "Frustrated or angry", "score": 2 },
+//           { "value": "desperate", "label": "Desperate to make money", "score": 0 }
+//         ]
+//       },
+//       {
+//         "id": "recent_performance",
+//         "question": "What happened in your last 3 trades?",
+//         "type": "single_choice",
+//         "options": [
+//           { "value": "mixed", "label": "Mix of wins and losses", "score": 10 },
+//           { "value": "mostly_wins", "label": "Mostly wins", "score": 8 },
+//           { "value": "small_losses", "label": "Small losses", "score": 7 },
+//           { "value": "big_wins", "label": "Big wins", "score": 5 },
+//           { "value": "big_losses", "label": "Big losses", "score": 2 }
+//         ]
+//       },
+//       {
+//         "id": "motivation",
+//         "question": "Why do you want to take this trade?",
+//         "type": "single_choice",
+//         "options": [
+//           { "value": "good_setup", "label": "It fits my trading plan perfectly", "score": 10 },
+//           { "value": "decent_setup", "label": "Decent setup with good risk/reward", "score": 8 },
+//           { "value": "fomo", "label": "Don't want to miss the move", "score": 3 },
+//           { "value": "revenge", "label": "Need to make back recent losses", "score": 1 },
+//           { "value": "bored", "label": "Haven't traded in a while", "score": 2 }
+//         ]
+//       },
+//       {
+//         "id": "conviction_level",
+//         "question": "How confident are you in this trade setup?",
+//         "type": "scale",
+//         "min": 1,
+//         "max": 10,
+//         "labels": {
+//           "1": "Very uncertain",
+//           "5": "Moderately confident",
+//           "10": "Extremely confident"
+//         }
+//       },
+//       {
+//         "id": "patience_level",
+//         "question": "How long did you wait/analyze before considering this trade?",
+//         "type": "single_choice",
+//         "options": [
+//           { "value": "planned", "label": "Part of pre-planned watchlist", "score": 10 },
+//           { "value": "hours", "label": "Watched for several hours", "score": 8 },
+//           { "value": "minutes", "label": "Analyzed for 15-30 minutes", "score": 6 },
+//           { "value": "quick", "label": "Quick 5 minute look", "score": 3 },
+//           { "value": "impulse", "label": "Immediate impulse trade", "score": 0 }
+//         ]
+//       },
+//       {
+//         "id": "risk_comfort",
+//         "question": "How do you feel about the risk on this trade?",
+//         "type": "single_choice",
+//         "options": [
+//           { "value": "comfortable", "label": "Completely comfortable with potential loss", "score": 10 },
+//           { "value": "acceptable", "label": "Acceptable risk for the opportunity", "score": 8 },
+//           { "value": "nervous", "label": "A bit nervous about the risk", "score": 5 },
+//           { "value": "scary", "label": "The risk makes me uncomfortable", "score": 2 },
+//           { "value": "cant_afford", "label": "Can't really afford to lose this", "score": 0 }
+//         ]
+//       },
+//       {
+//         "id": "exit_plan_clarity",
+//         "question": "How clear is your exit strategy?",
+//         "type": "single_choice",
+//         "options": [
+//           { "value": "very_clear", "label": "Exact levels and rules defined", "score": 10 },
+//           { "value": "mostly_clear", "label": "General plan with some flexibility", "score": 7 },
+//           { "value": "basic", "label": "Basic stop loss and target", "score": 5 },
+//           { "value": "vague", "label": "Will figure it out as I go", "score": 2 },
+//           { "value": "no_plan", "label": "No specific exit plan", "score": 0 }
+//         ]
+//       },
+//       {
+//         "id": "time_availability",
+//         "question": "How much time can you dedicate to monitoring this trade?",
+//         "type": "single_choice",
+//         "options": [
+//           { "value": "full_time", "label": "Can monitor constantly", "score": 10 },
+//           { "value": "regular", "label": "Check every 30-60 minutes", "score": 8 },
+//           { "value": "periodic", "label": "Check few times per day", "score": 6 },
+//           { "value": "limited", "label": "Check once or twice daily", "score": 4 },
+//           { "value": "set_forget", "label": "Set and forget only", "score": 3 }
+//         ]
+//       }
+//     ],
+//     "scoring": {
+//       "excellent": { "min": 75, "max": 100, "recommendation": "PROCEED", "message": "Excellent psychological state for trading" },
+//       "good": { "min": 60, "max": 74, "recommendation": "PROCEED_CAUTION", "message": "Good state but stay alert to emotional changes" },
+//       "moderate": { "min": 45, "max": 59, "recommendation": "CAUTION", "message": "Some psychological risks - consider smaller position" },
+//       "poor": { "min": 30, "max": 44, "recommendation": "WAIT", "message": "High psychological risk - wait for better mindset" },
+//       "dangerous": { "min": 0, "max": 29, "recommendation": "AVOID", "message": "Dangerous psychological state - do not trade" }
+//     },
+//     "flags": {
+//       "revenge_trading": { "triggered_by": ["motivation.revenge", "recent_performance.big_losses"], "warning": "High revenge trading risk detected" },
+//       "overconfidence": { "triggered_by": ["recent_performance.big_wins", "conviction_level.>8"], "warning": "Overconfidence risk - reduce position size" },
+//       "fomo": { "triggered_by": ["motivation.fomo", "patience_level.impulse"], "warning": "FOMO detected - high probability of poor entry" },
+//       "insufficient_analysis": { "triggered_by": ["patience_level.quick", "exit_plan_clarity.vague"], "warning": "Insufficient preparation - high risk of mistakes" },
+//       "emotional_stress": { "triggered_by": ["emotional_state.frustrated", "risk_comfort.scary"], "warning": "High emotional stress - avoid trading" }
+//     }
+//   }
+// };
+
+// export { refinedTradingPrompt, preTradingQuestionnaire };
