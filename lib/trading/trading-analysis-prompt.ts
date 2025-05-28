@@ -224,18 +224,49 @@ JSON RESPONSE STRUCTURE:
     }
   },
   
-  "levels": {
-    "currentPrice": "current price level",
-    "entryZone": "entry price range",
-    "stopLoss": "stop loss level",
-    "target1": "25% position exit",
-    "target2": "50% position exit", 
-    "target3": "75% position exit",
-    "finalTarget": "last 25% exit or trail",
-    "support": "key support level",
-    "resistance": "key resistance level",
-    "riskReward": "calculated ratio"
+"execution": {
+  "type": "Buy/Sell/Buy Stop/Sell Stop/Buy Limit/Sell Limit",
+  "currentPrice": {
+    "title": "Current Price",
+    "data": "148.52"
   },
+  "entryZone": {
+    "title": "Entry Zone", 
+    "data": "148.50-148.55"
+  },
+  "stopLoss": {
+    "title": "Stop Loss",
+    "data": "148.15"
+  },
+  "target1": {
+    "title": "Target 1",
+    "data": "149.20"
+  },
+  "target2": {
+    "title": "Target 2",
+    "data": "149.80"
+  },
+  "target3": {
+    "title": "Target 3", 
+    "data": "150.20"
+  },
+  "finalTarget": {
+    "title": "Final Target",
+    "data": "150.50"
+  },
+  "support": {
+    "title": "Key Support",
+    "data": "148.30"
+  },
+  "resistance": {
+    "title": "Key Resistance", 
+    "data": "148.50"
+  },
+  "riskReward": {
+    "title": "Risk Reward",
+    "data": "1:2.2"
+  }
+},
   
   "position": {
     "accountRisk": "dollar amount at risk",
@@ -321,6 +352,19 @@ JSON RESPONSE STRUCTURE:
       "description": "other positions that could amplify losses"
     }
   },
+
+  "calculationData": {
+  "riskPips": 37,
+  "rewardPips": 68,
+  "target2Pips": 128,
+  "target3Pips": 168,
+  "riskRewardRatio": 1.84,
+  "averageTimeToTarget": 24,
+  "maxHoldTime": 72,
+  "pipValue": 10,
+  "contractSize": 100000
+},
+
   
   "actionPlan": {
     "rightNow": {
@@ -386,6 +430,17 @@ CRITICAL FORMATTING RULES:
 16. For enhanced objects with title/description, keep descriptions under 100 characters
 17. For score objects with title/score/reasoning, keep reasoning under 100 characters
 18. Ensure every enhanced object has both title and description/reasoning fields
+
+ 
+CALCULATION DATA REQUIREMENTS:
+- riskPips: exact pip/point distance from entry to stop loss
+- rewardPips: exact pip/point distance from entry to primary target
+- target2Pips/target3Pips: distances to additional targets
+- riskRewardRatio: primary risk:reward as decimal (e.g. 2.2 for 1:2.2)
+- averageTimeToTarget: average hours to reach profit target
+- maxHoldTime: maximum recommended hold time in hours
+- pipValue: account currency value per pip/point
+- contractSize: standard lot/contract size for position calculations
 
 SCORE CALCULATION WEIGHTS:
 - Technical: 30%

@@ -1,7 +1,8 @@
 import { TradePlan } from "@/types/trading/analysis";
 
 // Alternative example with different setup type
-export const data: TradePlan = {
+export const dummyData: TradePlan = {
+  id: "67267847837483",
   summary:
     "USD/JPY bullish ascending triangle breakout. Requires Asian session monitoring. Moderate setup.",
   signal:
@@ -135,17 +136,51 @@ export const data: TradePlan = {
     },
   },
 
-  levels: {
-    currentPrice: 148.52,
-    entryZone: "148.50-148.55",
-    stopLoss: 148.15,
-    target1: 149.2,
-    target2: 149.8,
-    target3: 150.2,
-    finalTarget: 150.5,
-    support: 148.3,
-    resistance: 148.5,
-    riskReward: "1:2.2",
+  execution: {
+    type: {
+      title: "Execution",
+      description: "Buy",
+    },
+    currentPrice: {
+      title: "Current Price",
+      description: "148.52",
+    },
+    entryZone: {
+      title: "Entry Zone",
+      description: "148.50-148.55",
+    },
+    stopLoss: {
+      title: "Stop Loss",
+      description: "148.15",
+    },
+    target1: {
+      title: "Target 1",
+      description: "149.20",
+    },
+    target2: {
+      title: "Target 2",
+      description: "149.80",
+    },
+    target3: {
+      title: "Target 3",
+      description: "150.20",
+    },
+    finalTarget: {
+      title: "Final Target",
+      description: "150.50",
+    },
+    support: {
+      title: "Key Support",
+      description: "148.30",
+    },
+    resistance: {
+      title: "Key Resistance",
+      description: "148.50",
+    },
+    riskReward: {
+      title: "Risk Reward",
+      description: "1:2.2",
+    },
   },
 
   position: {
@@ -231,6 +266,18 @@ export const data: TradePlan = {
       title: "Correlation Risk",
       description: "USD strength could reverse quickly on Fed news",
     },
+  },
+
+  calculationData: {
+    riskPips: 37, // 148.52 - 148.15 = 37 pips
+    rewardPips: 68, // 149.20 - 148.52 = 68 pips
+    target2Pips: 128, // 149.80 - 148.52 = 128 pips
+    target3Pips: 168, // 150.20 - 148.52 = 168 pips
+    riskRewardRatio: 1.84, // 68/37 = 1.84 ratio
+    averageTimeToTarget: 24, // 24 hours average to profit
+    maxHoldTime: 72, // 3 days maximum hold
+    pipValue: 10, // $10 per pip for USD/JPY
+    contractSize: 100000, // Standard lot size
   },
 
   actionPlan: {

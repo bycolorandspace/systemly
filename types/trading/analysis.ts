@@ -16,13 +16,15 @@ export type AnalysisResponse = {
 
 export interface AnalysisProps {
   list:
+    | Execution
     | TradingReality
     | ActionPlan
     | ExitStrategy
     | BeginnerGuidance
     | AlternativeScenarios
     | RiskWarnings
-    | string[];
+    | string[]
+    | undefined;
 }
 
 // UI Helper Types
@@ -37,23 +39,27 @@ export type ScoreItem = {
   reasoning: string;
 };
 
+// Updated CalculationData type - removing probability fields
+export type CalculationData = {
+  // Price metrics (in pips for forex, points for other instruments)
+  riskPips: number; // Distance to stop loss
+  rewardPips: number; // Distance to primary target
+  target2Pips: number; // Distance to second target
+  target3Pips: number; // Distance to third target
+
+  // Risk ratios
+  riskRewardRatio: number; // Primary risk:reward as decimal (e.g., 2.2)
+
+  // Time metrics (in hours)
+  averageTimeToTarget: number; // Average hours to reach profit
+  maxHoldTime: number; // Maximum recommended hold time
+
+  // Instrument specifics
+  pipValue: number; // Value of one pip/point in account currency
+  contractSize: number; // Standard contract/lot size
+};
+
 // Score Types
-export type QualityScore = {
-  overall: number;
-  technical: number;
-  timing: number;
-  riskReward: number;
-  tradability: number;
-};
-
-export type QualityScoreReasoning = {
-  technicalReason: string;
-  timingReason: string;
-  riskRewardReason: string;
-  tradabilityReason: string;
-};
-
-// Enhanced Score Types with UI Data
 export type Scores = {
   overall: number;
   technical: ScoreItem;
@@ -62,7 +68,6 @@ export type Scores = {
   tradability: ScoreItem;
 };
 
-// Enhanced Technical with UI Data
 export type Technicals = {
   trendScore: ScoreItem;
   setupScore: ScoreItem;
@@ -72,7 +77,6 @@ export type Technicals = {
   technicalSummary: DescriptiveItem;
 };
 
-// Enhanced Trading Reality with UI Data
 export type TradingReality = {
   timeCommitment: DescriptiveItem;
   sessionOptimal: DescriptiveItem;
@@ -83,7 +87,6 @@ export type TradingReality = {
   skillLevel: DescriptiveItem;
 };
 
-// Enhanced Exit Strategy with UI Data
 export type ExitStrategy = {
   primaryExit: DescriptiveItem;
   partialProfits: DescriptiveItem;
@@ -95,28 +98,28 @@ export type ExitStrategy = {
   maxTimeInTrade: DescriptiveItem;
 };
 
-export type Levels = {
-  currentPrice: number;
-  entryZone: string; // Range format like "1.0940-1.0945"
-  stopLoss: number;
-  target1: number;
-  target2: number;
-  target3: number;
-  finalTarget: number;
-  support: number;
-  resistance: number;
-  riskReward: string; // Format like "1:2.3"
+export type Execution = {
+  type: DescriptiveItem; // "Buy", "Sell", "Buy Stop", "Sell Stop", "Buy Limit", "Sell Limit"
+  currentPrice: DescriptiveItem;
+  entryZone: DescriptiveItem;
+  stopLoss: DescriptiveItem;
+  target1: DescriptiveItem;
+  target2: DescriptiveItem;
+  target3: DescriptiveItem;
+  finalTarget: DescriptiveItem;
+  support: DescriptiveItem;
+  resistance: DescriptiveItem;
+  riskReward: DescriptiveItem;
 };
 
 export type Position = {
-  accountRisk: number; // Dollar amount
+  accountRisk: number;
   positionSize: string;
   riskPercent: string;
   maxDailyRisk: string;
   correlationWarning: string;
 };
 
-// Enhanced Alternative Scenarios with UI Data
 export type AlternativeScenarios = {
   bullishScenario: DescriptiveItem;
   bearishScenario: DescriptiveItem;
@@ -125,7 +128,6 @@ export type AlternativeScenarios = {
   invalidationScenario: DescriptiveItem;
 };
 
-// Enhanced Beginner Guidance with UI Data
 export type BeginnerGuidance = {
   shouldNewbiesTrade: DescriptiveItem;
   whyNot: DescriptiveItem;
@@ -134,7 +136,6 @@ export type BeginnerGuidance = {
   practiceFirst: DescriptiveItem;
 };
 
-// Enhanced Risk Warnings with UI Data
 export type RiskWarnings = {
   primaryRisk: DescriptiveItem;
   falseBreakoutRisk: DescriptiveItem;
@@ -143,7 +144,6 @@ export type RiskWarnings = {
   correlationRisk: DescriptiveItem;
 };
 
-// Enhanced Action Plan with UI Data
 export type ActionPlan = {
   rightNow: DescriptiveItem;
   waitFor: DescriptiveItem;
@@ -153,9 +153,10 @@ export type ActionPlan = {
   dailyReview: DescriptiveItem;
 };
 
-// Enhanced version with UI-friendly structure
+// Main TradePlan with calculation data
 export type TradePlan = {
-  // Summary (simple strings, no enhancement needed)
+  id: string;
+  // Summary
   summary: string;
   signal: string;
   confidence: Confidence;
@@ -163,27 +164,29 @@ export type TradePlan = {
   direction: Direction;
   recommendation: Recommendation;
 
-  // Enhanced Scores and Analysis
+  // Scores and Analysis
   scores: Scores;
   technical: Technicals;
 
-  // Enhanced Trading Details
+  // Trading Details
   tradingReality: TradingReality;
   exitStrategy: ExitStrategy;
-  levels: Levels; // Keep simple for price levels
-  position: Position; // Keep simple for position data
+  execution: Execution; // Changed from levels
+  position: Position;
 
-  // Enhanced Scenarios and Guidance
+  // Calculation data for frontend
+  calculationData: CalculationData;
+
+  // Scenarios and Guidance
   alternativeScenarios: AlternativeScenarios;
   beginnerGuidance: BeginnerGuidance;
 
-  // Enhanced Risk and Actions
-  dataLimitations: string[]; // Keep simple array
+  // Risk and Actions
+  dataLimitations: string[];
   riskWarnings: RiskWarnings;
   actionPlan: ActionPlan;
 };
 
-// User Input Types (for the prompt)
 export type UserInputs = {
   accountSize: number;
   riskPerTrade: number;

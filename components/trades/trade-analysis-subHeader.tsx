@@ -9,10 +9,10 @@ export default function TradeSubHeader({
   icon: React.ReactNode;
 }) {
   return (
-    <AccordionTrigger>
+    <AccordionTrigger className="hover:no-underline">
       <div className="flex gap-4 items-center justify-center">
         {icon}
-        <h2 className="text-2xl font-light">{title}</h2>
+        <h2 className="text-lg font-light">{title}</h2>
       </div>
     </AccordionTrigger>
   );

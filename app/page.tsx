@@ -12,87 +12,85 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { useTradeplan } from "@/hooks/useTradePlan";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
-  const [isDragOver, setIsDragOver] = useState(false);
-  const [isUploading, setIsuploading] = useState(false);
+  const { tradePlan, isUploading, error, uploadImage } = useTradeplan();
+  const router = useRouter();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("handleFileSelect triggered"); // Add this
     const file = event.target.files?.[0];
-    if (file) processFile(file);
+    console.log("File found:", file); // Add this
+    if (file) {
+      console.log("About to process file"); // Add this
+      processFile(file);
+    }
   };
 
   const processFile = (file: File) => {
+    console.log("processFile called with:", file.name, file.type); // Add this
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
     }
 
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
       toast.error("File size must be less than 5MB");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
     }
 
     const url = URL.createObjectURL(file);
-
     setSelectedFile(file);
     setPreviewUrl(url);
   };
 
-  // Handle drag and drop
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault(); // Prevent default behavior
-    setIsDragOver(true);
-  };
+  // const analyseChart = async (file: File) => {
+  //   const formData = new FormData();
+  //   formData.append("image", file);
 
-  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setIsDragOver(false);
-  };
+  //   try {
+  //     setIsuploading(true);
 
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setIsDragOver(false);
+  //     const response = await fetch("/api/analyse-chart", {
+  //       method: "POST",
+  //       body: formData, // No Content-Type header needed
+  //     });
+  //     if (response) {
+  //       setIsuploading(false);
+  //       return response.json();
+  //     } else {
+  //       setIsuploading(false);
+  //       const errorMessage = "Issue with openAI response";
+  //       console.log(`Problem uploading image: ${errorMessage}`);
+  //       throw Error(errorMessage);
+  //     }
+  //   } catch (error) {
+  //     const errorMessage = error as string;
 
-    const files = event.dataTransfer.files;
-    if (files.length > 0) {
-      processFile(files[0]);
-    }
-  };
+  //     console.log(`Problem uploading image: ${errorMessage}`);
+  //     toast.error(`Problem uploading image: ${errorMessage}`);
+  //     setIsuploading(false);
+  //   }
+  // };
 
-  const analyseChart = async (file: File) => {
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      setIsuploading(true);
-
-      const response = await fetch("/api/analyse-chart", {
-        method: "POST",
-        body: formData, // No Content-Type header needed
-      });
-      if (response) {
-        setIsuploading(false);
-        return response.json();
-      } else {
-        setIsuploading(false);
-        const errorMessage = "Issue with openAI response";
-        console.log(`Problem uploading image: ${errorMessage}`);
-        throw Error(errorMessage);
-      }
-    } catch (error) {
-      const errorMessage = error as string;
-
-      console.log(`Problem uploading image: ${errorMessage}`);
-      toast.error(`Problem uploading image: ${errorMessage}`);
-      setIsuploading(false);
-    }
-  };
-
-  const handleUploadClick = () => {
+  const handleSelectAction = async () => {
     fileInputRef.current?.click();
   };
 
@@ -107,13 +105,21 @@ export default function Home() {
     }
   };
 
+  const HandleAnalyseAction = async () => {
+    if (selectedFile) {
+      await uploadImage(selectedFile);
+    }
+  };
+
   useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
+    if (tradePlan) {
+      // GO TO TRADEPLAN ID
+      router.push(`trades/${tradePlan.analysis.id}`);
+    }
+    if (error) {
+      toast.error(error);
+    }
+  }, [tradePlan, error, router]);
 
   return (
     <div className=" items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -179,27 +185,18 @@ export default function Home() {
               </div>
             ) : (
               <div
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                className={`flex flex-col items-center justify-center h-64 border-dashed border-4 rounded-lg gap-4 cursor-pointer transition-colors ${
-                  isDragOver
-                    ? "bg-blue-50 border-blue-400"
-                    : "bg-gray-900 border-gray-600"
-                }`}
-                onClick={handleUploadClick}
+                className={`flex flex-col items-center justify-center h-64 border-dashed border-4 rounded-lg gap-4 cursor-pointer transition-colors`}
+                onClick={handleSelectAction}
               >
-                <ImagePlusIcon
-                  className={isDragOver ? "text-blue-500" : "text-gray-500"}
-                  size={64}
-                />
-                <p className={isDragOver ? "text-blue-500" : "text-gray-500"}>
-                  {isDragOver
-                    ? "Drop your image here"
-                    : "Drag and drop your image here"}
-                </p>
-                <p className="text-gray-500">or</p>
-                <Button variant="outline" onClick={handleUploadClick}>
+                <ImagePlusIcon className={"text-gray-500"} size={64} />
+
+                <Button
+                  variant="outline"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelectAction();
+                  }}
+                >
                   Upload Image
                 </Button>
               </div>
@@ -217,14 +214,7 @@ export default function Home() {
                 <p>Select an image to analyse</p>
               )}
             </div>
-            <Button
-              disabled={!selectedFile}
-              onClick={async () => {
-                if (selectedFile) {
-                  await analyseChart(selectedFile);
-                }
-              }}
-            >
+            <Button disabled={!selectedFile} onClick={HandleAnalyseAction}>
               Analyse <ArrowUp className="text-gray-500" size={32} />
             </Button>
           </div>

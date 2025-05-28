@@ -45,14 +45,14 @@
 
 :root {
   --radius: 0.625rem;
-  --background: #000000;
+  --background: #0d0d0d;
   --foreground: #dcdcdc;
-  --card: #141414;
+  --card: #1f1f1f;
   --card-foreground: #dcdcdc;
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.13 0.028 261.692);
   --primary: #ffffff;
-  --primary-foreground: #0f0f0f;
+  --primary-foreground: #090909;
   --secondary: #6e6e6e;
   --secondary-foreground: oklch(0.21 0.034 264.665);
   --muted: oklch(0.967 0.003 264.542);
@@ -68,7 +68,7 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0.002 247.839);
+  --sidebar: #212121;
   --sidebar-foreground: oklch(0.13 0.028 261.692);
   --sidebar-primary: oklch(0.21 0.034 264.665);
   --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
@@ -120,7 +120,7 @@
     @apply bg-background text-foreground;
   }
   .large-currency {
-    @apply font-extralight text-5xl text-primary;
+    @apply font-extralight text-3xl text-primary;
   }
   .headerh2 {
     @apply text-2xl font-light;
