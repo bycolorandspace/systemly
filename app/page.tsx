@@ -4,9 +4,8 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import {
   ArrowUp,
-  Camera,
-  ImagePlusIcon,
   LoaderPinwheelIcon,
+  PlusCircle,
   // LoaderPinwheelIcon,
   X,
 } from "lucide-react";
@@ -123,17 +122,14 @@ export default function Home() {
 
   return (
     <div className=" items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
-        <Image src="/logo-systemly.svg" alt="Logo" width={150} height={200} />
-        <Card className="px-8 py-4 max-w-2xl">
-          <div>
-            <h2 className="font-bold text-2xl">Upload a chart image</h2>
-            <p className="text-sm text-gray-500">
-              Upload a chart image to get started. We will extract the data from
-              the image and provide you with insights.
-            </p>
+      <main className="flex flex-col w-full gap-[32px] row-start-2 items-center justify-center">
+        <div className="max-w-4xl w-full flex flex-col gap-6 justify-center items-center">
+          <h1 className="text-3xl font-extralight">Upload Chart Screenshots</h1>
+          <div className="w-full max-w-2xl h-[1px] bg-border">
+            <span className="w-1/4 bg-white h-[1px] flex animate-in duration-300"></span>
           </div>
-
+        </div>
+        <Card className="px-8 py-4 max-w-4xl w-full bg-transparent">
           <input
             ref={fileInputRef}
             type="file"
@@ -145,7 +141,7 @@ export default function Home() {
           <div className="mt-4">
             {previewUrl ? (
               <div className="relative">
-                <div className="relative w-full max-h-64 overflow-hidden rounded-lg">
+                <div className="relative w-full p-8  overflow-hidden rounded-lg">
                   {isUploading && (
                     <div className="absolute bg-black/70  overflow-hidden w-full h-full flex flex-col rounded-lg justify-center items-center gap-2">
                       <div className="flex flex-row gap-2 items-center">
@@ -185,40 +181,45 @@ export default function Home() {
               </div>
             ) : (
               <div
-                className={`flex flex-col items-center justify-center h-64 border-dashed border-4 rounded-lg gap-4 cursor-pointer transition-colors`}
+                className={`flex flex-col items-center justify-center p-8 rounded-lg gap-8 cursor-pointer transition-colors`}
                 onClick={handleSelectAction}
               >
-                <ImagePlusIcon className={"text-gray-500"} size={64} />
+                <div className="max-w-md flex flex-col gap-6 justify-center items-center">
+                  <PlusCircle
+                    className={"text-border"}
+                    size={48}
+                    strokeWidth={0.75}
+                  />
+                  <h2 className="headerh2">Add a new chart</h2>
+                  <p className="text-sm text-center text-secondary">
+                    Add at least one chart screenshot. For a more accurate trade
+                    plan & analysis, add a range of small to high time frames
+                    charts (e.g 15 Min, 1hr, 4hr).
+                  </p>
+                </div>
 
                 <Button
-                  variant="outline"
+                  className="rounded-full"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleSelectAction();
                   }}
                 >
-                  Upload Image
+                  Select Image
                 </Button>
               </div>
             )}
           </div>
-
-          <div className="flex flex-row gap-4  w-full">
-            <div className="border rounded-lg px-4 py-2 flex flex-row justify-center items-center text-sm flex-1">
-              {selectedFile ? (
-                <p className="flex flex-row gap-2 items-center">
-                  {selectedFile.name}{" "}
-                  <Camera className="text-gray-500" size={16} />
-                </p>
-              ) : (
-                <p>Select an image to analyse</p>
-              )}
-            </div>
-            <Button disabled={!selectedFile} onClick={HandleAnalyseAction}>
-              Analyse <ArrowUp className="text-gray-500" size={32} />
-            </Button>
-          </div>
         </Card>
+        <div>
+          <Button
+            className="rounded-full"
+            disabled={!selectedFile}
+            onClick={HandleAnalyseAction}
+          >
+            Next <ArrowUp className="text-gray-500" size={32} />
+          </Button>
+        </div>
       </main>
     </div>
   );

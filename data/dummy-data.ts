@@ -1,4 +1,15 @@
-import { TradePlan } from "@/types/trading/analysis";
+import { TradePlan, UserInputs } from "@/types/trading/analysis";
+
+export const userInput: UserInputs = {
+  accountSize: 2500,
+  riskPerTrade: 1,
+  tradingStyle: "Position Trade",
+  instrument: "XAU/USD",
+  tradingSessions: ["NY", "LDN"],
+  marketPreferences: ["Trending Markets", "Economic Events"],
+  riskTolerance: "low",
+  tradingGoals: ["Inflation Hedge", "Long-term Growth"],
+};
 
 // Alternative example with different setup type
 export const dummyData: TradePlan = {

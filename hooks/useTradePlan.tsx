@@ -27,7 +27,7 @@ export function useTradeplan() {
             data.analysis.id = crypto.randomUUID();
             setTradePlan(data);
             // Upload page: Save data
-            localStorage.setItem("currentTradePlan", JSON.stringify(tradePlan));
+            localStorage.setItem("currentTradePlan", JSON.stringify(data));
           } else {
             setTradePlan(null);
             setError(`Analysis failed: ${data.error}` || "Analysis failed");

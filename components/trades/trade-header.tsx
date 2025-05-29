@@ -2,16 +2,21 @@ import { Button } from "@/components/ui/button";
 import { Link2, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
+import { UserInputs } from "@/types/trading/analysis";
 //import { data } from "@/data/dummy-data";
 
-export default function TradeHeader({ title }: { title: string }) {
-  const accountSize = "$10,000";
-  const risk = "1%";
-
+export default function TradeHeader({
+  title,
+  userInputs,
+}: {
+  title: string;
+  userInputs: UserInputs;
+}) {
+  const accountCurrency = "$";
   return (
     <div className="header flex flex-col gap-6 justify-between mt-10">
       <div className="w-full flex flex-row justify-between">
-        <h1 className="text-4xl font-light"> {title}</h1>
+        <h1 className="text-4xl font-light max-w-4xl"> {title}</h1>
         <div className="flex flex-row gap-4">
           <Button className="rounded-full">
             <Link
@@ -43,12 +48,12 @@ export default function TradeHeader({ title }: { title: string }) {
       <div className="w-full flex flex-row gap-2">
         <div>
           <span className="text-secondary text-sm">Your account size: </span>{" "}
-          {accountSize}
+          {`${accountCurrency}${userInputs.accountSize}`}
         </div>
         <Separator orientation="vertical" />
         <div>
           <span className="text-secondary text-sm">Risk per trade: </span>{" "}
-          {risk}
+          {`${userInputs.riskPerTrade}%`}
         </div>
         <Separator orientation="vertical" />
       </div>
