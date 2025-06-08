@@ -1,10 +1,10 @@
 import { AnalysisProps } from "@/types/trading/analysis";
-import { Copy } from "lucide-react";
-import { Button } from "../ui/button";
+import CopyPlanButton from "./copy-plan-button";
 
 export default function TradeAnalysisListAlt({ list }: AnalysisProps) {
   return (
     <div className="border rounded-xl ">
+      {/* Object.entries(list ?? ["No data"]).map(([key, item], index) => ( */}
       {!Array.isArray(list) &&
         Object.entries(list ?? ["No data"]).map(([key, item]) => (
           <div
@@ -15,10 +15,12 @@ export default function TradeAnalysisListAlt({ list }: AnalysisProps) {
               <>
                 <h3 className="font-bold text-secondary">{item.title}</h3>
                 <div className="flex flex-row gap-1 items-center">
-                  <p>{item.description}</p>
-                  <Button variant={"ghost"}>
-                    <Copy className="icon text-secondary" />
-                  </Button>
+                  <p>{item.data}</p>
+                  <CopyPlanButton
+                    contentName={item.title}
+                    title={item.title}
+                    list={[item.data]}
+                  />
                 </div>
               </>
             ) : (

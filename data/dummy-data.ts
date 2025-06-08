@@ -1,14 +1,10 @@
 import { TradePlan, UserInputs } from "@/types/trading/analysis";
 
 export const userInput: UserInputs = {
+  accountCurrency: "USD",
   accountSize: 2500,
   riskPerTrade: 1,
   tradingStyle: "Position Trade",
-  instrument: "XAU/USD",
-  tradingSessions: ["NY", "LDN"],
-  marketPreferences: ["Trending Markets", "Economic Events"],
-  riskTolerance: "low",
-  tradingGoals: ["Inflation Hedge", "Long-term Growth"],
 };
 
 // Alternative example with different setup type
@@ -146,7 +142,6 @@ export const dummyData: TradePlan = {
       description: "3 trading days maximum for this momentum play",
     },
   },
-
   execution: {
     type: {
       title: "Execution",
@@ -159,6 +154,10 @@ export const dummyData: TradePlan = {
     entryZone: {
       title: "Entry Zone",
       description: "148.50-148.55",
+    },
+    lotSize: {
+      title: "Lot Size",
+      description: "0.11",
     },
     stopLoss: {
       title: "Stop Loss",

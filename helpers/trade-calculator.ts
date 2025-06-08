@@ -1,5 +1,13 @@
 import { TradePlan } from "@/types/trading/analysis";
 
+export const calculateRiskAmount = (
+  accountSize: number,
+  riskPercent: number
+) => {
+  const riskAmount = accountSize * (riskPercent / 100);
+  return riskAmount;
+};
+
 export const calculateTradeMetrics = (
   analysis: TradePlan,
   accountSize: number,

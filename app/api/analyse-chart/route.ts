@@ -1,6 +1,7 @@
 // app/api/analyze-chart/route.ts
-import { getRandomPlaceholder } from "@/lib/trading/placeholder-user-input";
+// import { getRandomPlaceholder } from "@/lib/trading/placeholder-user-input";
 import buildAnalysisPrompt from "@/lib/trading/trading-analysis-prompt";
+import { UserInputs } from "@/schema/trade-analysis-schema";
 import { NextResponse, NextRequest } from "next/server";
 import OpenAI from "openai";
 
@@ -9,19 +10,26 @@ const openai = new OpenAI({
 });
 
 export const POST = async (req: NextRequest) => {
-  const userInput = getRandomPlaceholder();
+  //const userInput = getRandomPlaceholder();
 
   try {
     const formData = await req.formData();
     const file = formData.get("image") as File;
+    const userInputString = formData.get("userInputs") as string;
 
+    // Convert image to base64
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const imageBase64 = buffer.toString("base64");
-    console.log("Image base64 length:", imageBase64.length);
 
-    console.log("Using user input:", userInput);
-    console.log("Image base64 length:", imageBase64.length);
+    // Parse user inputs from form data
+    let userInput: UserInputs;
+    try {
+      userInput = JSON.parse(userInputString) as UserInputs;
+    } catch (error) {
+      console.error("Error parsing user inputs:", error);
+      return NextResponse.json({ error: "Invalid user iput" }, { status: 400 });
+    }
 
     const response = await openai.chat.completions.create({
       model: "gpt-4.1-mini",
@@ -48,7 +56,6 @@ export const POST = async (req: NextRequest) => {
     console.log("OpenAI response:", response);
     const analysisContent = response.choices[0].message.content;
 
-    // Try to parse JSON from response
     // Try to parse JSON from response
     let parsedAnalysis;
     try {

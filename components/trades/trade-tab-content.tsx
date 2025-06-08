@@ -4,6 +4,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import TradeAnalysisListAlt from "./trade-analysis-list-alt";
 import EditPlanButton from "./edit-plan-button";
 import CopyPlanButton from "./copy-plan-button";
+
 interface TradeTabProp extends AnalysisProps {
   title: string;
   value: string;
@@ -21,7 +22,7 @@ export default function TradeTabContent({ title, value, list }: TradeTabProp) {
             <h2 className="headerh2">{title}</h2>
             <div className="flex flex-row gap-2 items-center">
               <EditPlanButton />
-              <CopyPlanButton />
+              <CopyPlanButton contentName={title} title={title} list={list} />
             </div>
           </CardTitle>
         </CardHeader>
@@ -30,7 +31,7 @@ export default function TradeTabContent({ title, value, list }: TradeTabProp) {
             <div className="mx-4 p-0">
               <TradeAnalysisListAlt list={list} />
             </div>
-          ) : (
+          ) : list !== undefined ? (
             <div className="mx-4 border rounded-2xl p-0">
               {Object.entries(list ?? ["No data"]).map(([key, item], index) => (
                 <div
@@ -46,6 +47,14 @@ export default function TradeTabContent({ title, value, list }: TradeTabProp) {
                   </div>
                 </div>
               ))}
+            </div>
+          ) : (
+            <div className="border rounded-xl mx-4 ">
+              <div className="px-4 py-2">
+                <div className="mx-0 p-0">
+                  <span> No data available </span>
+                </div>
+              </div>
             </div>
           )}
         </CardContent>

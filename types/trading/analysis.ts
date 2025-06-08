@@ -5,6 +5,19 @@ export type Recommendation = "PROCEED" | "CAUTION" | "AVOID";
 export type SkillLevel = "beginner" | "intermediate" | "advanced";
 export type BeginnerRecommendation = "yes" | "no" | "paperTrade";
 
+export enum TradingStyle {
+  DAY = "Day",
+  SWING = "Swing",
+  POSITION = "Position",
+  SCALPER = "Scalper",
+}
+
+export enum AccountCurrency {
+  USD = "$",
+  EURO = "€",
+  GBP = "£",
+}
+
 // API Response
 export type AnalysisResponse = {
   success: boolean;
@@ -31,6 +44,7 @@ export interface AnalysisProps {
 export type DescriptiveItem = {
   title: string;
   description: string;
+  data?: string | number | boolean; // Optional data field for additional info
 };
 
 export type ScoreItem = {
@@ -102,6 +116,7 @@ export type Execution = {
   type: DescriptiveItem; // "Buy", "Sell", "Buy Stop", "Sell Stop", "Buy Limit", "Sell Limit"
   currentPrice: DescriptiveItem;
   entryZone: DescriptiveItem;
+  lotSize: DescriptiveItem;
   stopLoss: DescriptiveItem;
   target1: DescriptiveItem;
   target2: DescriptiveItem;
@@ -188,14 +203,10 @@ export type TradePlan = {
 };
 
 export type UserInputs = {
+  accountCurrency: string;
   accountSize: number;
   riskPerTrade: number;
   tradingStyle: string;
-  instrument: string;
-  tradingSessions: string[];
-  marketPreferences: string[];
-  riskTolerance: string;
-  tradingGoals: string[];
 };
 
 // Utility Types for Frontend

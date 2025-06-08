@@ -5,9 +5,7 @@ const baseSystemPrompt =
 
 export default function buildAnalysisPrompt(userInputs: UserInputs): string {
   return `${baseSystemPrompt}
-
   ${promptC(userInputs)}
-
 `;
 }
 
@@ -100,6 +98,8 @@ JSON RESPONSE STRUCTURE:
   "confidence": "high/medium/low",
   "timeframe": "chart timeframe", 
   "direction": "long/short/wait",
+  "symbol": "XAUUSD",
+  "trend": "bullish/bearish/sideways with strength assessment",
   "recommendation": "PROCEED/CAUTION/AVOID",
   
   "scores": {
@@ -225,7 +225,10 @@ JSON RESPONSE STRUCTURE:
   },
   
 "execution": {
-  "type": "Buy/Sell/Buy Stop/Sell Stop/Buy Limit/Sell Limit",
+  "type":{
+    "title": "Execution",
+    "data": "Buy/Sell/Buy Stop/Sell Stop/Buy Limit/Sell Limit",
+  },  
   "currentPrice": {
     "title": "Current Price",
     "data": "148.52"
@@ -233,6 +236,10 @@ JSON RESPONSE STRUCTURE:
   "entryZone": {
     "title": "Entry Zone", 
     "data": "148.50-148.55"
+  },
+    "lotSize": {
+    "title": "Lot Size", 
+    "data": "0.1"
   },
   "stopLoss": {
     "title": "Stop Loss",
