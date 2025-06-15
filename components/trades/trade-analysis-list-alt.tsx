@@ -9,11 +9,11 @@ export default function TradeAnalysisListAlt({ list }: AnalysisProps) {
         Object.entries(list ?? ["No data"]).map(([key, item]) => (
           <div
             key={key}
-            className="w-full flex flex-row justify-between items-center gap-1 not-last:border-b-1 px-4 py-2 m-0"
+            className="w-full flex flex-row justify-between items-center gap-1 not-last:border-b-1 pl-4 pr-2 py-2 m-0"
           >
             {item.title ? (
               <>
-                <h3 className="font-bold text-secondary">{item.title}</h3>
+                <h3 className="font-medium text-secondary">{item.title}</h3>
                 <div className="flex flex-row gap-1 items-center">
                   <p>{item.data}</p>
                   <CopyPlanButton

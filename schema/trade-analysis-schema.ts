@@ -8,8 +8,8 @@ export const userInputSchema = z.object({
     .positive("Account size must be positive")
     .min(50, `Account size must be at least 50.00`)
     .max(1_000_000, "Account size cannot exceed 1M"),
-  riskPerTrade: z
-    .number()
+  riskPerTrade: z.coerce
+    .number() // ✅ Automatically converts string to number
     .min(0.01, "Risk must be at least 0.01%")
     .max(100, "Risk cannot exceed 100%"),
   tradingStyle: z.string().min(1, "Trading style is required"),

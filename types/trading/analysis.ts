@@ -1,9 +1,27 @@
 // Core Types
-export type Confidence = "high" | "medium" | "low";
-export type Direction = "long" | "short" | "wait";
-export type Recommendation = "PROCEED" | "CAUTION" | "AVOID";
+export type Confidence = "High" | "Medium" | "Low";
+export type Direction = "Long" | "Short" | "Wait";
+export type Recommendation =
+  | "Great opportunity"
+  | "Worth a try"
+  | "Take caution"
+  | "Probably Avoid"
+  | "No trade";
 export type SkillLevel = "beginner" | "intermediate" | "advanced";
 export type BeginnerRecommendation = "yes" | "no" | "paperTrade";
+export type TrafficLightStatus =
+  | "🟢 EXCELLENT"
+  | "🟢 GOOD"
+  | "🟡 MODERATE"
+  | "🔴 WEAK"
+  | "🔴 AVOID"
+  | "🔘 N/A";
+
+export enum TradeAnalysisFormSteps {
+  STEPONE = "stepOne", // Step 1: Upload Chart
+  STEPTWO = "stepTwo", // Step 2: User Inputs
+  STEPTREE = "stepThree", // Step 3: User Login
+}
 
 export enum TradingStyle {
   DAY = "Day",
@@ -29,13 +47,16 @@ export type AnalysisResponse = {
 
 export interface AnalysisProps {
   list:
+    | MarketContext
+    | ProfessionalEdge
     | Execution
-    | TradingReality
     | ActionPlan
     | ExitStrategy
     | BeginnerGuidance
     | AlternativeScenarios
     | RiskWarnings
+    | MarketContext
+    | ProfessionalEdge
     | string[]
     | undefined;
 }
@@ -43,13 +64,15 @@ export interface AnalysisProps {
 // UI Helper Types
 export type DescriptiveItem = {
   title: string;
-  description: string;
+  description?: string;
   data?: string | number | boolean; // Optional data field for additional info
 };
 
+// Updated ScoreItem with traffic light status
 export type ScoreItem = {
   title: string;
   score: number;
+  status: TrafficLightStatus;
   reasoning: string;
 };
 
@@ -73,32 +96,44 @@ export type CalculationData = {
   contractSize: number; // Standard contract/lot size
 };
 
-// Score Types
+// Updated Score Types with traffic light status
 export type Scores = {
-  overall: number;
+  overall: ScoreItem; // Changed from number to ScoreItem
   technical: ScoreItem;
   timing: ScoreItem;
   riskReward: ScoreItem;
   tradability: ScoreItem;
 };
 
+// Enhanced Technicals with new scoring components
 export type Technicals = {
   trendScore: ScoreItem;
   setupScore: ScoreItem;
   confluenceScore: ScoreItem;
   clarityScore: ScoreItem;
   volumeScore: ScoreItem;
-  technicalSummary: DescriptiveItem;
+  momentumScore: ScoreItem; // NEW
+  marketStructureScore: ScoreItem; // NEW
+  volatilityScore: ScoreItem; // NEW
+  technicalSummary: ScoreItem;
 };
 
-export type TradingReality = {
-  timeCommitment: DescriptiveItem;
-  sessionOptimal: DescriptiveItem;
-  sleepRisk: DescriptiveItem;
-  weekendHold: DescriptiveItem;
-  newsRisk: DescriptiveItem;
-  multitaskingRisk: DescriptiveItem;
-  skillLevel: DescriptiveItem;
+// NEW: Market Context Type
+export type MarketContext = {
+  sessionActive: DescriptiveItem;
+  correlatedAssets: DescriptiveItem;
+  institutionalBias: DescriptiveItem;
+  retailSentiment: DescriptiveItem;
+  liquidityZones: DescriptiveItem;
+};
+
+// NEW: Professional Edge Type
+export type ProfessionalEdge = {
+  smartMoneyClues: DescriptiveItem;
+  orderFlowSignals: DescriptiveItem;
+  algorithmicLevels: DescriptiveItem;
+  newsDrivers: DescriptiveItem;
+  timingEdge: DescriptiveItem;
 };
 
 export type ExitStrategy = {
@@ -128,7 +163,7 @@ export type Execution = {
 };
 
 export type Position = {
-  accountRisk: number;
+  accountRisk: string; // Changed from number to string to match prompt
   positionSize: string;
   riskPercent: string;
   maxDailyRisk: string;
@@ -168,25 +203,35 @@ export type ActionPlan = {
   dailyReview: DescriptiveItem;
 };
 
-// Main TradePlan with calculation data
+// Updated Main TradePlan with new fields
 export type TradePlan = {
-  id: string;
-  // Summary
-  summary: string;
+  id?: string; // Made optional if not always provided
+
+  // NEW: Enhanced Summary Fields
+  title: string; // NEW: Actionable title
+  summary: string; // Brief summary (150 chars)
+  detailedSummary: string; // NEW: Detailed summary (700 chars)
+
+  // Core Analysis
   signal: string;
   confidence: Confidence;
-  timeframe: string;
+  timeframe: string; // Enhanced with execution timing
   direction: Direction;
+  symbol: string; // Made explicit
+  trend: string; // Made explicit with strength assessment
   recommendation: Recommendation;
 
   // Scores and Analysis
   scores: Scores;
   technical: Technicals;
 
+  // NEW: Market Intelligence
+  marketContext: MarketContext; // NEW
+  professionalEdge: ProfessionalEdge; // NEW
+
   // Trading Details
-  tradingReality: TradingReality;
   exitStrategy: ExitStrategy;
-  execution: Execution; // Changed from levels
+  execution: Execution;
   position: Position;
 
   // Calculation data for frontend
@@ -209,17 +254,19 @@ export type UserInputs = {
   tradingStyle: string;
 };
 
-// Utility Types for Frontend
+// Updated Utility Types for Frontend
 export type ScoreColor = "green" | "yellow" | "orange" | "red";
 export type RiskLevel = "low" | "medium" | "high" | "extreme";
 
 export type ScoreDisplay = {
   score: number;
+  status: TrafficLightStatus; // NEW: Added traffic light status
   color: ScoreColor;
   label: string;
 };
 
 // Helper function types
 export type GetScoreColor = (score: number) => ScoreColor;
+export type GetTrafficLightStatus = (score: number) => TrafficLightStatus; // NEW
 export type GetRiskLevel = (recommendation: Recommendation) => RiskLevel;
 export type FormatPrice = (price: number, instrument: string) => string;

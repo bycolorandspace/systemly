@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 import TradeAnalysisListAlt from "./trade-analysis-list-alt";
 import EditPlanButton from "./edit-plan-button";
-import CopyPlanButton from "./copy-plan-button";
+import CopyPlanButton, { CopyButtonType } from "./copy-plan-button";
 
 interface TradeTabProp extends AnalysisProps {
   title: string;
@@ -22,7 +22,12 @@ export default function TradeTabContent({ title, value, list }: TradeTabProp) {
             <h2 className="headerh2">{title}</h2>
             <div className="flex flex-row gap-2 items-center">
               <EditPlanButton />
-              <CopyPlanButton contentName={title} title={title} list={list} />
+              <CopyPlanButton
+                buttonType={CopyButtonType.full}
+                contentName={title}
+                title={title}
+                list={list}
+              />
             </div>
           </CardTitle>
         </CardHeader>

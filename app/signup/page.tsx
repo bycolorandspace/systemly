@@ -1,4 +1,4 @@
-import { SignUpForm } from "@/components/auth/forms/signup-form";
+import { SignUpFormLayout } from "@/components/auth/forms/signin-form-layout";
 import Logo from "@/components/common/logo";
 import Image from "next/image";
 
@@ -11,16 +11,16 @@ export default function SignUpPage() {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-sm">
-            <SignUpForm />
+            <SignUpFormLayout />
           </div>
         </div>
       </div>
       <div className="bg-muted relative hidden lg:block">
         <Image
-          src="/placeholder.svg"
+          src="/images/ayefeh.png"
           alt="Image"
-          width={500}
-          height={500}
+          width={1674}
+          height={2878}
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
       </div>

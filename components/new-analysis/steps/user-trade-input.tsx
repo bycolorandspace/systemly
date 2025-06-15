@@ -13,20 +13,21 @@ import { useTradeAnalysisContext } from "@/contexts/trade-analysis-context";
 import { Select, SelectTrigger } from "@radix-ui/react-select";
 import { SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { ChevronDown } from "lucide-react";
-import { calculateRiskAmount } from "@/helpers/trade-calculator";
 import { formatMoney } from "@/helpers/format-money";
 import { AccountCurrency, TradingStyle } from "@/types/trading/analysis";
+import { calculateBasicRisk } from "@/helpers/trade-calculator";
 
 export default function UserTradeInput() {
   const form = useFormContext();
   const { userInputFields, setUserInput } = useTradeAnalysisContext();
   const description =
     "This will be used to calculate your risk and position size for each trade. You can change this later in your account settings.";
+
   return (
     <div className=" items-center justify-items-center  p-8 pb-4 gap-16 sm:p-8 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col w-full gap-[32px] row-start-2 items-center justify-center">
-        <div className="grid grid-cols-3 gap-8 w-full mx-auto mt-2 justify-between items-start">
-          <div className="flex flex-col gap-2 justify-center items-center">
+      <main className="flex flex-col w-full gap-[32px] row-start-2 items-center justify-center ">
+        <div className=" flex flex-col md:grid md:grid-cols-3 gap-8  mt-2 items-start justify-evenly ">
+          <div className="flex flex-col gap-2 justify-center items-center w-full lg:w-[300px]">
             <h3 className="w-full text-center">Your account size</h3>
             <h2 className="text-5xl font-extralight w-full text-center">
               {`${userInputFields?.accountCurrency ?? "$"}${formatMoney(
@@ -34,7 +35,7 @@ export default function UserTradeInput() {
               )}`}
             </h2>
           </div>
-          <div className="flex flex-col gap-2 justify-center items-center">
+          <div className="flex flex-col gap-2 justify-center items-center w-full lg:w-[300px]">
             <h3 className="w-full text-center">Risk per trade</h3>
             <h2 className="text-5xl font-extralight w-full text-center">
               {userInputFields?.riskPerTrade
@@ -45,22 +46,21 @@ export default function UserTradeInput() {
               {userInputFields?.riskPerTrade
                 ? `You may lose up to ${
                     userInputFields.accountCurrency ?? "$"
-                  }${calculateRiskAmount(
+                  }${calculateBasicRisk(
                     userInputFields?.accountSize,
                     userInputFields?.riskPerTrade
                   )} per trade`
                 : "Set your risk per trade to see potential losses"}
             </small>
           </div>
-
-          <div className="flex flex-col gap-2 justify-center items-center">
+          <div className="flex flex-col gap-2 justify-center items-center w-full lg:w-[300px]">
             <h3 className="w-full text-center">Your trading style</h3>
             <h2 className="text-5xl font-extralight w-full text-center">
               {`${userInputFields?.tradingStyle ?? "Day"}`}
             </h2>
           </div>
         </div>
-        <Card className="px-8 py-4 w-full max-w-4xl bg-transparent">
+        <Card className="px-8 py-4 w-full  bg-transparent max-w-xl">
           <div className="flex flex-col gap-4">
             <FormField
               control={form.control}
@@ -153,8 +153,13 @@ export default function UserTradeInput() {
                       onChange={(e) => {
                         const value = e.target.value;
 
-                        const numericValue =
-                          value === "" ? 0 : parseFloat(e.target.value) || 0;
+                        if (value === "") {
+                          field.onChange("");
+                          setUserInput({ ["riskPerTrade"]: 1 });
+                          return;
+                        }
+
+                        const numericValue = parseFloat(value);
                         field.onChange(numericValue); // Pass number to form
                         setUserInput({ ["riskPerTrade"]: numericValue }); // Pass number to state
                       }}

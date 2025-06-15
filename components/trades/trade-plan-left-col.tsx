@@ -1,19 +1,16 @@
 import { Accordion } from "@/components/ui/accordion";
 
-import { Baby, Ban, Clock, DatabaseZap, Zap } from "lucide-react";
+import {
+  Baby,
+  Ban,
+  BriefcaseBusinessIcon,
+  DatabaseZap,
+  LucidePictureInPicture2,
+  Zap,
+} from "lucide-react";
 
 import TradeAnalysisContent from "./trade-analysis-content";
 import { TradePlan } from "@/types/trading/analysis";
-
-// <div className="flex flex-col gap-4">
-//   <div>
-//     {" "}
-//     <p className="text-lg">{data.summary}</p>
-//   </div>
-//   <div className="flex flex-row gap-2">
-//     <Badge>Direction: {data.direction}</Badge>{" "}
-//     <Badge>Timeframe: {data.timeframe}</Badge>{" "}
-//     <Badge>Confidence: {data.confidence}</Badge>{" "}
 
 export default function TradePlanLeftCol({ data }: { data: TradePlan | null }) {
   const tradeAnalysisContent = [
@@ -25,33 +22,49 @@ export default function TradePlanLeftCol({ data }: { data: TradePlan | null }) {
       customContent: [data?.direction, data?.timeframe, data?.confidence],
     },
     {
-      title: "Time optimisation",
-      value: "item-1",
-      icon: <Clock className="w-4 h-4 text-primary" strokeWidth={1} />,
-      content: data?.tradingReality,
-    },
-    {
       title: "Risk warnings",
-      value: "item-2",
+      value: "item-1",
       icon: <Ban className="w-4 h-4 text-primary" strokeWidth={1} />,
       content: data?.riskWarnings,
     },
     {
-      title: "Data limitations",
-      value: "item-3",
-      icon: <DatabaseZap className="w-4 h-4 text-primary" strokeWidth={1} />,
-      content: data?.dataLimitations,
+      title: "Market context",
+      value: "item-2",
+      icon: (
+        <LucidePictureInPicture2
+          className="w-4 h-4 text-primary"
+          strokeWidth={1}
+        />
+      ),
+      content: data?.marketContext,
     },
     {
-      title: "Beginner Guidance",
-      value: "item-4",
+      title: "Beginner guidance",
+      value: "item-5",
       icon: <Baby className="w-4 h-4 text-primary" strokeWidth={1} />,
       content: data?.beginnerGuidance,
+    },
+    {
+      title: "Proffesional edge",
+      value: "item-6",
+      icon: (
+        <BriefcaseBusinessIcon
+          className="w-4 h-4 text-primary"
+          strokeWidth={1}
+        />
+      ),
+      content: data?.professionalEdge,
+    },
+    {
+      title: "Data limitations",
+      value: "item-8",
+      icon: <DatabaseZap className="w-4 h-4 text-primary" strokeWidth={1} />,
+      content: data?.dataLimitations,
     },
   ];
 
   return (
-    <div className="">
+    <div className="space-y-6">
       <Accordion type="single" collapsible className="w-full">
         {tradeAnalysisContent.map((item, index) => {
           return (

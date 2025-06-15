@@ -14,9 +14,9 @@ export default function FormNavigation() {
       <div className="flex flex-row justify-center">
         <Button
           type="button"
-          variant={"ghost"}
+          variant={"link"}
           onClick={prevQuestion}
-          className="rounded-full"
+          className="rounded-full hover:text-accent-foreground hover:no-underline"
           hidden={stepIndex === 0 ? true : false}
         >
           Previous

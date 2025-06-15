@@ -34,3 +34,12 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+####################################
+
+ANALYSIS STRUCTURE:
+App/analysis/[id]/page.tsx - House the main analysis page
+App/analysis/new/page.tsx - New analysis page
+|**Components/new-analysis/form-layout.tsx - Submit form action
+|**Components/steps/upload-chart.tsx - Step 1: Upload chart images - Collect data from user
+|\_\_Components/steps/user-trade-input.tsx - Step 2: User trade input - Collect data from user

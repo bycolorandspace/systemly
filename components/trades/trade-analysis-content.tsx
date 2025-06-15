@@ -3,7 +3,7 @@ import TradeSubHeader from "./trade-analysis-subHeader";
 import { AnalysisProps } from "@/types/trading/analysis";
 // import TradeAnalysisListAlt from "./trade-analysis-list-alt";
 import TradeAnalysisList from "./trade-analysis-list";
-import CopyPlanButton from "./copy-plan-button";
+import CopyPlanButton, { CopyButtonType } from "./copy-plan-button";
 import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
 
@@ -42,6 +42,7 @@ export default function TradeAnalysisContent({
                 <div className="block float-right w-auto">
                   <div className="flex flex-row gap-2">
                     <CopyPlanButton
+                      buttonType={CopyButtonType.full}
                       contentName={title}
                       title={title}
                       list={list}

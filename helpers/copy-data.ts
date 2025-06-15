@@ -4,15 +4,17 @@ import {
   BeginnerGuidance,
   Execution,
   ExitStrategy,
+  MarketContext,
+  ProfessionalEdge,
   RiskWarnings,
-  TradingReality,
 } from "@/types/trading/analysis";
 
 export const CopyTradeData = (
   title: string,
   list:
+    | ProfessionalEdge
+    | MarketContext
     | Execution
-    | TradingReality
     | ActionPlan
     | ExitStrategy
     | BeginnerGuidance
@@ -50,16 +52,18 @@ export const CopyTradeData = (
     };
 
     navigator.clipboard
-      .writeText(JSON.stringify(copyData, null, 2))
+      // Create a new ClipboardItem with the text data and no json
+      .writeText(`Title: ${copyData.title}\n\nContent:\n${copyData.content}`)
       .then(() => {
         //Successfully copied to clipboard - SHOW TOAST
-        return `${copyData.title} ${copyData}`;
-        console.log("Trade data copied to clipboard successfully.");
+        console.log(
+          "Trade data copied to clipboard successfully....",
+          copyData
+        );
       })
       .catch((error) => {
         // Failed to copy - SHOW TOAST
         return `Failed to copy trade data: ${error}`;
-        console.error("Failed to copy trade data to clipboard:", error);
       });
   } else {
     // If analysis is undefined or empty, return a message - SHOW TOAST

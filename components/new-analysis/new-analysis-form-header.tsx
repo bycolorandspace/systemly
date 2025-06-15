@@ -16,8 +16,8 @@ export default function NewAnalysisFormHeader() {
         return stageTitles.stageOne;
       case 1:
         return stageTitles.stageTwo;
-      case 2:
-        return "Trade Analysis Result";
+      // case 2:
+      //   return stageTitles.stageThree;
       default:
         return "New Trade Analysis";
     }

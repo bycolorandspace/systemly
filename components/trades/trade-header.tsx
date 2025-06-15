@@ -4,19 +4,22 @@ import Link from "next/link";
 import { Separator } from "../ui/separator";
 import { UserInputs } from "@/types/trading/analysis";
 import { Skeleton } from "../ui/skeleton";
+import { formatCurrrencytoSymbol } from "@/helpers/format-currency";
+import { Badge } from "../ui/badge";
+import { GetTradingStyleColor } from "@/helpers/status-converter";
 //import { data } from "@/data/dummy-data";
 
 export default function TradeHeader({
   isLoading,
   title,
   userInputs,
+  pnl,
 }: {
   isLoading?: boolean;
   title: string;
   userInputs: UserInputs | null;
+  pnl: number;
 }) {
-  const accountCurrency = "$";
-
   return (
     <div className="header flex flex-col gap-6 justify-between mt-10">
       {isLoading ? (
@@ -43,7 +46,16 @@ export default function TradeHeader({
       ) : (
         <>
           <div className="w-full flex flex-row justify-between">
-            <h1 className="text-4xl font-light max-w-4xl"> {title}</h1>
+            <h1 className="text-4xl font-light max-w-5xl">
+              {" "}
+              {`${title} - ${
+                userInputs
+                  ? formatCurrrencytoSymbol(
+                      userInputs?.accountCurrency as string
+                    )
+                  : "Problem fetching data"
+              }${pnl} potential`}{" "}
+            </h1>
             <div className="flex flex-row gap-4">
               <Button className="rounded-full">
                 <Link
@@ -73,20 +85,28 @@ export default function TradeHeader({
           </div>
 
           <div className="w-full flex flex-row gap-2">
-            <div>
-              <span className="text-secondary text-sm">
-                Your account size:{" "}
-              </span>{" "}
+            <Badge className="bg-card text-card-foreground rounded-full">
+              Your account size:{" "}
               {userInputs?.accountSize
-                ? `${accountCurrency}${userInputs?.accountSize}`
+                ? `${formatCurrrencytoSymbol(userInputs?.accountCurrency)}${
+                    userInputs?.accountSize
+                  }`
                 : "N/A"}
-            </div>
+            </Badge>
             <Separator orientation="vertical" />
-            <div>
-              <span className="text-secondary text-sm">Risk per trade: </span>{" "}
+            <Badge className="bg-card text-card-foreground rounded-full">
+              Risk per trade:{" "}
               {userInputs?.accountSize ? `${userInputs?.riskPerTrade}%` : "N/A"}
-            </div>
+            </Badge>
             <Separator orientation="vertical" />
+            <Badge
+              className={`text-black rounded-full ${GetTradingStyleColor(
+                userInputs?.tradingStyle ?? "Day"
+              )} `}
+            >
+              Trading style:{" "}
+              {userInputs?.tradingStyle ? `${userInputs?.tradingStyle}` : "N/A"}
+            </Badge>
           </div>
         </>
       )}

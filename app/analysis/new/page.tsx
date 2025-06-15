@@ -30,6 +30,8 @@ import SelectChartImage from "@/components/new-analysis/steps/upload-chart";
 import { useTradeAnalysisContext } from "@/contexts/trade-analysis-context";
 import FormNavigation from "@/components/new-analysis/form-navigation";
 import NewAnalysisFormHeader from "@/components/new-analysis/new-analysis-form-header";
+import LoginForm from "@/components/auth/forms/login-form";
+
 // import { useRouter } from "next/navigation";
 // import TradeAnalysisLoading from "@/components/skeleton/trade-analysis-loading";
 
@@ -41,6 +43,12 @@ const RenderCurrentStep = () => {
       return <SelectChartImage />;
     case 1:
       return <UserTradeInput />;
+    case 2:
+      return (
+        <div className="w-full max-w-md">
+          <LoginForm />
+        </div>
+      );
     default:
       return <SelectChartImage />; // Fallback for unexpected stepIndex
   }
@@ -55,7 +63,7 @@ export default function NewTradeAnalysis() {
 
   return (
     <FormLayout schema={tradingAnalysisRequestSchema} mode="onBlur">
-      <div className="w-full max-w-6xl mx-auto flex min-h-screen flex-col pb-12 items-center justify-start mt-8">
+      <div className="w-full max-w-6xl mx-auto flex min-h-screen flex-col pb-12 items-center justify-start mt-8 space-y-8">
         <NewAnalysisFormHeader />
         <RenderCurrentStep />
         <FormNavigation />

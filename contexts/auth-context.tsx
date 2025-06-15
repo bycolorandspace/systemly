@@ -29,26 +29,26 @@ export function AuthContextProvider({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<Session | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        const { user: currentUser, session: currentSession } =
-          await authService.getCurrentSession();
-        setUser(currentUser);
-        setSession(currentSession);
-      } catch (error) {
-        console.error("Error initializing auth: ", error);
-        setUser(null);
-        setSession(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    initializeAuth();
+    // const initializeAuth = async () => {
+    //   try {
+    //     const { user: currentUser, session: currentSession } =
+    //       await authService.getCurrentSession();
+    //     setUser(currentUser);
+    //     setSession(currentSession);
+    //   } catch (error) {
+    //     console.error("Error initializing auth: ", error);
+    //     setUser(null);
+    //     setSession(null);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+    // initializeAuth();
 
     // listen for auth changes
     const {
@@ -70,10 +70,6 @@ export function AuthContextProvider({
       if (results.user) {
         router.push("/");
       }
-      //   if (results.user) {
-      //     setUser(results.user);
-      //     setSession(results.session);
-      //   }
     } catch (error) {
       setLoading(false);
       throw error;

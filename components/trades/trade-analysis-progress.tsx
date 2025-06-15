@@ -11,31 +11,31 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 const TradeProgressSteps = [
   {
     title: "Preparing",
-    description: "Analyzing your trade plan and user inputs.",
-    time: 4000,
+    description: "Analyzing your chart and settings.",
+    time: 4000, // 4s: quick start
   },
   {
     title: "Analyzing",
     description: "Analyzing market conditions and trade scenarios.",
-    time: 10000,
+    time: 8000, // 8s: builds anticipation
   },
   {
     title: "Calculating",
     description: "Calculating trade metrics and risk management.",
-    time: 4000,
+    time: 22000, // 22s: longest, main work
   },
   {
     title: "Optimizing",
     description: "Optimizing trade parameters for best results.",
-    time: 8000,
+    time: 9000, // 4s: quick, feels smart
   },
   {
     title: "Finalizing",
-    description: "Finalizing trade plan and preparing results.",
-    time: 10000,
+    description: "Finalizing analysis...",
+    time: 20000, // 14.058s: suspenseful finish
   },
 ];
-// Total: 36000 ms (36 seconds)
+// Total: 4000 + 8000 + 22000 + 4000 + 14058 = 52058 ms
 
 export default function TradeAnalysisProgress() {
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -119,8 +119,8 @@ export default function TradeAnalysisProgress() {
     <AlertDialog defaultOpen={true}>
       <AlertDialogContent className="bg-transparent border-0 outline-0 shadow-none">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-2xl font-extralight mb-4 text-center">
-            Preparing your chart analysis...
+          <AlertDialogTitle className="text-4xl font-extralight mb-4 text-center">
+            <span className="space-x-4">Let us prepare your analysis...</span>
           </AlertDialogTitle>
           <div className="w-full h-[1px] bg-border rounded-full">
             <div
@@ -146,11 +146,14 @@ export default function TradeAnalysisProgress() {
             const stepActive = index === currentStepIndex && !stepCompleted;
 
             return (
-              <div key={index} className="flex flex-row gap-2 items-center">
+              <div
+                key={index}
+                className="flex flex-row gap-2 items-center bg-white text-card p-4 rounded-xl shadow-sm"
+              >
                 {stepCompleted ? (
                   <CheckCircle2
-                    className="w-6 h-6 text-green-400"
-                    strokeWidth={0.75}
+                    className="w-6 h-6 text-green-600"
+                    strokeWidth={2}
                   />
                 ) : stepActive ? (
                   <LoaderIcon className="w-6 h-6 text-secondary animate-spin" />
@@ -159,7 +162,7 @@ export default function TradeAnalysisProgress() {
                 )}
 
                 <div>
-                  <h3 className={`text-xl font-light`}>{step.description}</h3>
+                  <h3 className={`text-md font-medium`}>{step.description}</h3>
                 </div>
               </div>
             );

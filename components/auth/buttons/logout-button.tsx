@@ -7,7 +7,11 @@ export default function LogoutButton() {
   const { logOut, loading } = useAuth();
   const hidden = loading ? "" : "hidden";
   return (
-    <Button className="rounded-full cursor-pointer" onClick={logOut}>
+    <Button
+      variant={"link"}
+      className="rounded-full cursor-pointer"
+      onClick={logOut}
+    >
       <Loader className={`mr-2 size-4 animate-spin ${hidden}`} />
       {loading ? "Logging out..." : "Logout"}
     </Button>

@@ -11,7 +11,8 @@ import {
   TradePlan,
   TradingStyle,
 } from "@/types/trading/analysis";
-import { useTradeplan } from "@/hooks/useTradePlan";
+import { useUploadTradeAnalysis } from "@/hooks/useUploadTradeAnalysis";
+import { useUploadAnalysis } from "@/hooks/useUploadAnalysis";
 
 type FormState = {
   // FTrack form state
@@ -29,7 +30,7 @@ type FormState = {
   validatedUserInput: UserInputs | null;
   isLoading: boolean;
   updateLoading: (loading: boolean) => void;
-  error: string | null;
+  contextError: string | null;
   uploadFormData: (data: TradingAnalysisRequest, id: string) => Promise<void>;
 };
 
@@ -43,6 +44,7 @@ export const DEFAULT_USER_INPUTS: UserInputs = {
 export enum stageTitles {
   stageOne = "Upload Chart Screenshots",
   stageTwo = "Customise your setup",
+  // stageThree = "Sign in for Analysis",
 }
 
 const TradeAnalysisContext = createContext<FormState | undefined>(undefined);
@@ -65,7 +67,9 @@ export const TradeAnalysisProvider = ({
   children: ReactNode;
 }) => {
   // It should handle the upload of data and provide the validated trade plan and user inputs
-  const { uploadData } = useTradeplan();
+  const { uploadData } = useUploadTradeAnalysis();
+  const { uploadToSupabase } = useUploadAnalysis();
+  // Use CurrencyService.convertUSD directly instead of destructuring
 
   const [validatedTradePlan, setValidatedTradePlan] =
     useState<TradePlan | null>(null);
@@ -73,14 +77,15 @@ export const TradeAnalysisProvider = ({
     useState<UserInputs | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [contextError, setError] = useState("");
 
   const [stepIndex, setStepIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [userInputFields, setUserInputFields] = useState<UserInputs | null>(
     DEFAULT_USER_INPUTS
   );
-  const totalSteps = 2;
+  // Calculate total steps based on the TradeAnalysisFormSteps enum
+  const totalSteps = Object.entries(stageTitles).length;
 
   const nextQuestion = () => {
     setStepIndex((prev) => prev + 1);
@@ -132,17 +137,20 @@ export const TradeAnalysisProvider = ({
       const results = await uploadData(data, id);
 
       if (results.success) {
-        console.log(
-          "Data uploaded successfully with id: ",
-          results.analysis.id
-        );
         // If the upload was successful, set the validated trade plan and user inputs
         setValidatedTradePlan(results.analysis);
         setValidatedUserInput(results.userInput);
+
+        // Call Supabase function to update the trade plan in the database
+        await uploadToSupabase(results.analysis, results.userInput);
       }
     } catch (err) {
       console.error("Error uploading data:", err);
-      setError("Failed to upload data");
+      setError(
+        `Failed to upload data:  ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`
+      );
     } finally {
       // Always reset loading state
       setIsLoading(false);
@@ -170,7 +178,7 @@ export const TradeAnalysisProvider = ({
         validatedUserInput,
         isLoading,
         updateLoading,
-        error,
+        contextError,
         uploadFormData,
       }}
     >
