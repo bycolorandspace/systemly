@@ -26,7 +26,7 @@ export default function UserTradeInput() {
   return (
     <div className=" items-center justify-items-center  p-8 pb-4 gap-16 sm:p-8 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col w-full gap-[32px] row-start-2 items-center justify-center ">
-        <div className=" flex flex-col md:grid md:grid-cols-3 gap-8  mt-2 items-start justify-evenly ">
+        <div className=" flex flex-col md:grid md:grid-cols-3 gap-8  items-start justify-evenly ">
           <div className="flex flex-col gap-2 justify-center items-center w-full lg:w-[300px]">
             <h3 className="w-full text-center">Your account size</h3>
             <h2 className="text-5xl font-extralight w-full text-center">

@@ -46,12 +46,17 @@ export function useUploadAnalysis() {
           uploading: false,
           error: record.error || "Failed to save analysis",
         });
+        console.error(
+          "Upload error:",
+          record.error || "Failed to save analysis"
+        );
       }
     } catch (error) {
       const errorMessage =
         error instanceof DatabaseError
           ? error.message
           : "Failed to save analysis";
+      console.error("Upload error:", errorMessage);
       setUploadState({
         uploading: false,
         error: errorMessage,

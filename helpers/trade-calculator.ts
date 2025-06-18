@@ -1,5 +1,6 @@
 import { convertFromUSD } from "@/lib/currencyExchange";
 import { CalculationData, Execution } from "@/types/trading/analysis";
+import { formatCurrrencytoString } from "./format-currency";
 
 export interface UserInputs {
   accountCurrency: string;
@@ -128,7 +129,6 @@ export function validateTargetOrder(
 // Parses and validates all user and execution inputs, throws on error.
 export function parseAndValidateInputs(
   rawExecution: Execution,
-  userInputs: UserInputs,
   calculationData: CalculationData,
   positionScaling: PositionScaling
 ): ParsedExecutionData {
@@ -168,19 +168,10 @@ export function parseAndValidateInputs(
     ),
   ];
 
-  if (lotSize <= 0)
+  console.log("lotsize: ", lotSize);
+  if (lotSize < 0)
     errors.push({ field: "lotSize", message: "Lot size must be positive" });
-  if (userInputs.accountSize <= 0)
-    errors.push({
-      field: "accountSize",
-      message: "Account size must be positive",
-    });
-  if (userInputs.riskPerTrade <= 0 || userInputs.riskPerTrade > 10) {
-    errors.push({
-      field: "riskPerTrade",
-      message: "Risk per trade must be between 0.1% and 10%",
-    });
-  }
+
   if (calculationData.pipValue <= 0)
     errors.push({ field: "pipValue", message: "Pip value must be positive" });
 
@@ -202,7 +193,7 @@ export function parseAndValidateInputs(
     });
   }
 
-  validateTargetOrder(targets, tradeDirection, errors);
+  //validateTargetOrder(targets, tradeDirection, errors);
 
   if (errors.length > 0) {
     throw new Error(errors.map((e) => `${e.field}: ${e.message}`).join("; "));
@@ -369,17 +360,36 @@ export function validateRiskTolerance(
   };
 }
 
+export async function convertSimpleAmounts(
+  amount: number,
+  targetCurrency: string
+) {
+  if (targetCurrency.toUpperCase() === "USD" || targetCurrency === "$") {
+    return {
+      amount,
+    };
+  }
+
+  const currency = formatCurrrencytoString(targetCurrency);
+
+  const convertedProfits = await convertFromUSD(amount, currency);
+
+  return {
+    convertedAmount: convertedProfits.convertedAmount,
+  };
+}
+
 // Converts profits and risk metrics to the user's target currency.
 export async function convertCurrencyAmounts(
   individualProfits: number[],
   cumulativeProfits: number[],
+  targetCurrency: string,
   riskMetrics: {
     totalRiskAmount: number;
     riskPercentage: number;
     riskRewardRatio: string;
     profitPerPip: number;
-  },
-  targetCurrency: string
+  }
 ) {
   if (targetCurrency.toUpperCase() === "USD" || targetCurrency === "$") {
     return {
@@ -389,22 +399,24 @@ export async function convertCurrencyAmounts(
     };
   }
 
+  const currency = formatCurrrencytoString(targetCurrency);
+
   const convertedProfits = await Promise.all(
-    individualProfits.map((amount) => convertFromUSD(amount, targetCurrency))
+    individualProfits.map((amount) => convertFromUSD(amount, currency))
   );
 
   const convertedCumulative = await Promise.all(
-    cumulativeProfits.map((amount) => convertFromUSD(amount, targetCurrency))
+    cumulativeProfits.map((amount) => convertFromUSD(amount, currency))
   );
 
   const convertedRisk = await convertFromUSD(
     riskMetrics.totalRiskAmount,
-    targetCurrency
+    currency
   );
 
   const convertedProfitPerPip = await convertFromUSD(
     riskMetrics.profitPerPip,
-    targetCurrency
+    currency
   );
 
   return {
@@ -498,7 +510,6 @@ export async function calculateTrade(
   try {
     const parsedData = parseAndValidateInputs(
       rawExecution,
-      userInputs,
       calculationData,
       positionScaling
     );
@@ -544,8 +555,8 @@ export async function calculateTrade(
     const convertedAmounts = await convertCurrencyAmounts(
       individualProfits,
       cumulativeProfits,
-      riskMetrics,
-      userInputs.accountCurrency
+      userInputs.accountCurrency,
+      riskMetrics
     );
 
     return buildResults(

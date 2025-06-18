@@ -23,9 +23,9 @@ export const GetScoreColor = (score: number) => {
 
 export const GetTradingStyleColor = (style: string) => {
   if (style === "Day") {
-    return "bg-blue-300 text-black"; // Day
+    return "bg-amber-400 text-black"; // Day
   } else if (style === "Swing") {
-    return "bg-amber-300 text-black"; // Swing
+    return "bg-sky-500 text-black"; // Swing
   } else if (style === "Position") {
     return "bg-green-300 text-black"; // Position
   } else if (style === "Scalper") {

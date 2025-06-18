@@ -4,8 +4,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useTradeAnalysisContext } from "@/contexts/trade-analysis-context";
 import { CheckCircle2, LoaderIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState, useMemo } from "react";
 
 const TradeProgressSteps = [
@@ -38,6 +40,8 @@ const TradeProgressSteps = [
 // Total: 4000 + 8000 + 22000 + 4000 + 14058 = 52058 ms
 
 export default function TradeAnalysisProgress() {
+  const router = useRouter();
+  const { validatedTradePlan } = useTradeAnalysisContext();
   const [startTime, setStartTime] = useState<number | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -110,16 +114,21 @@ export default function TradeAnalysisProgress() {
   // Stop timer when complete to prevent unnecessary re-renders
   useEffect(() => {
     if (isComplete && intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
+      if (validatedTradePlan) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        console.log("Analysis complete, redirecting...", validatedTradePlan.id);
+        // Redirect to the trade plan page when analysis is complete
+        router.push(`/analysis/${validatedTradePlan.id}`); // Redirect to new analysis page
+      }
     }
-  }, [isComplete]);
+  }, [isComplete, router, validatedTradePlan]);
 
   return (
     <AlertDialog defaultOpen={true}>
-      <AlertDialogContent className="bg-transparent border-0 outline-0 shadow-none">
+      <AlertDialogContent className="bg-transparent border-0 outline-0 shadow-none justify-center items-center">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-4xl font-extralight mb-4 text-center">
+          <AlertDialogTitle className="text-2xl font-extralight mb-4 text-center">
             <span className="space-x-4">Let us prepare your analysis...</span>
           </AlertDialogTitle>
           <div className="w-full h-[1px] bg-border rounded-full">
@@ -136,7 +145,7 @@ export default function TradeAnalysisProgress() {
             className="mx-auto mb-4"
           />
         </AlertDialogHeader>
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
           {TradeProgressSteps.map((step, index) => {
             // Step is completed if we've moved past it
             const stepCompleted =
@@ -148,7 +157,7 @@ export default function TradeAnalysisProgress() {
             return (
               <div
                 key={index}
-                className="flex flex-row gap-2 items-center bg-white text-card p-4 rounded-xl shadow-sm"
+                className="flex flex-row gap-2 items-center bg-white text-card p-2 rounded-xl shadow-sm"
               >
                 {stepCompleted ? (
                   <CheckCircle2
@@ -162,7 +171,7 @@ export default function TradeAnalysisProgress() {
                 )}
 
                 <div>
-                  <h3 className={`text-md font-medium`}>{step.description}</h3>
+                  <h3 className={`text-sm font-medium`}>{step.description}</h3>
                 </div>
               </div>
             );

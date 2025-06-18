@@ -10,7 +10,7 @@ import { Accordion } from "../ui/accordion";
 
 export default function TradeAnalysisLoading() {
   return (
-    <div className="w-full h-screen flex items-center justify-center">
+    <div className="w-full h-screen flex items-start justify-center max-w-7xl mx-auto">
       <TradeAnalysisProgress />
       <div className=" w-full mx-auto px-6">
         <>

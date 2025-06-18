@@ -31,7 +31,7 @@ export default function NewAnalysisFormHeader() {
   // tradingStyle: z.string().min(1, "Trading style is required"),
 
   return (
-    <div className="h-[100px] w-full max-w-4xl flex flex-col gap-6 justify-center items-center">
+    <div className="h-[100px] w-full max-w-4xl px-8 xl:px-0 flex flex-col gap-6 justify-center items-center">
       <div className="flex flex-row justify-between items-center w-full">
         <h1 className="text-3xl font-extralight">{renderTitle()}</h1>
         <FormNavigation />

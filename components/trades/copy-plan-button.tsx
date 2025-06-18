@@ -23,6 +23,7 @@ export default function CopyPlanButton({
   list,
 }: CopyHandlerProp) {
   const CopyHandler = async () => {
+    console.log("Copying trade data:", title, list);
     try {
       await CopyTradeData(title, list);
       toast.success("Copied to clipboard.");

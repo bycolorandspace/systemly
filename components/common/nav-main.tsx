@@ -24,7 +24,11 @@ export function NavMain({
       <SidebarMenu>
         {links.map((item, index) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton size={"default"} asChild>
+            <SidebarMenuButton
+              size={"default"}
+              className={`${index === 0 && "bg-card"}`}
+              asChild
+            >
               <Link href={item.url}>
                 <item.icon
                   className={`w-8 h-8  ${

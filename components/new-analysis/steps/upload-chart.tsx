@@ -38,6 +38,7 @@ export default function SelectChartImage() {
     event: React.ChangeEvent<HTMLInputElement>,
     onFormChange: (file: File) => void
   ) => {
+    clearImageFile(); // Custom context
     const file = event.target.files?.[0];
 
     if (previewUrl) {
@@ -46,7 +47,6 @@ export default function SelectChartImage() {
 
     if (file) {
       const url = URL.createObjectURL(file);
-      localStorage.setItem("selectedImage", url); // Store the URL in localStorage
       setPreviewUrl(url);
 
       // Update both systems
@@ -120,7 +120,10 @@ export default function SelectChartImage() {
               <FormItem className="w-full max-w-4xl ">
                 <FormControl>
                   {/* Your existing Card and upload UI here */}
-                  <Card className="px-8 py-4 w-full bg-transparent">
+                  <Card
+                    className={`flex flex-col bg-transparent w-full  items-center justify-center p-8 rounded-lg gap-8 cursor-pointer transition-colors duration-200 hover:bg-card hover:border-secondary border border-border group`}
+                    onClick={handleSelectAction}
+                  >
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -145,41 +148,28 @@ export default function SelectChartImage() {
                           </div>
 
                           <Button
-                            onClick={() => removeImage(field.onChange)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeImage(field.onChange);
+                            }}
                             className="absolute w-8 h-8 top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors"
                           >
                             <X size={8} />
                           </Button>
                         </div>
                       ) : (
-                        <div
-                          className={`flex flex-col w-full items-center justify-center p-8 rounded-lg gap-8 cursor-pointer transition-colors`}
-                          onClick={handleSelectAction}
-                        >
-                          <div className="max-w-md flex flex-col gap-6 justify-center items-center">
-                            <PlusCircle
-                              className={"text-border"}
-                              size={48}
-                              strokeWidth={0.75}
-                            />
-                            <h2 className="headerh2">Add a new chart</h2>
-                            <p className="text-sm text-center text-secondary">
-                              Add at least one chart screenshot. For a more
-                              accurate trade plan & analysis, add a range of
-                              small to high time frames charts (e.g 15 Min, 1hr,
-                              4hr).
-                            </p>
-                          </div>
-
-                          <Button
-                            className="rounded-full"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleSelectAction();
-                            }}
-                          >
-                            Select Image
-                          </Button>
+                        <div className="max-w-md flex flex-col gap-6 justify-center items-center">
+                          <PlusCircle
+                            className={"text-border group-hover:text-white"}
+                            size={48}
+                            strokeWidth={0.75}
+                          />
+                          <h2 className="headerh2">Add a new chart</h2>
+                          <p className="text-sm text-center text-secondary">
+                            Add at least one chart screenshot. For a more
+                            accurate trade plan & analysis, add a range of small
+                            to high time frames charts (e.g 15 Min, 1hr, 4hr).
+                          </p>
                         </div>
                       )}
                     </div>

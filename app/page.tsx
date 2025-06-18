@@ -1,5 +1,6 @@
 "use client";
 import LogoutButton from "@/components/auth/buttons/logout-button";
+import Logo from "@/components/common/logo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
 import Router from "next/navigation";
@@ -17,7 +18,7 @@ export default function Home() {
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Systemly.ai</h1>
+        <Logo />
         {isAuthenticated ? (
           <div className="flex gap-4 flex-col items-center">
             <h2 className="text-lg">Hello, {user?.email}!</h2>
@@ -27,10 +28,10 @@ export default function Home() {
                 className="rounded-full cursor-pointer"
                 onClick={() => {
                   // Redirect to analysis page or handle navigation logic
-                  router.push("/analysis/new");
+                  router.push("/analysis/");
                 }}
               >
-                Start New Analysis
+                Dashboard
               </Button>
               <LogoutButton />
             </div>

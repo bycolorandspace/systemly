@@ -54,7 +54,7 @@ export function useUploadTradeAnalysis() {
     return result;
   };
 
-  const uploadData = async (
+  const uploadDataToLLM = async (
     data: TradingAnalysisRequest,
     id: string
   ): Promise<AnalysisResponse> => {
@@ -125,6 +125,6 @@ export function useUploadTradeAnalysis() {
   return {
     fullResults,
     error,
-    uploadData,
+    uploadDataToLLM,
   };
 }

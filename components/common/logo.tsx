@@ -1,15 +1,21 @@
-import { Navigation2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Logo() {
   return (
     <div>
-      <Link href="/" className="flex items-center gap-1 font-bold">
-        <div className="bg-transparent text-primary-foreground flex size-10 items-center justify-center rounded-md">
-          <Navigation2 className="size-5 text-white" />
-          {/* <GalleryVerticalEnd className="size-4" /> */}
-        </div>
-        Systemly.ai
+      <Link
+        href="/"
+        className="flex flex-row items-center justify-start gap-3 font-bold p-4 h-[50px]"
+      >
+        <Image
+          src={"/systemly-icon-logo.svg"}
+          alt="Systemly Logo"
+          width={60}
+          height={50}
+          className="object-contain"
+        />
+        Systemly
       </Link>
     </div>
   );

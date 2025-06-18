@@ -1,9 +1,9 @@
 "use client";
 
 import { useAuth } from "@/contexts/auth-context";
-import { LoaderPinwheel } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import UniversalPageLoader from "../common/universal-page-loader";
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const { loading, user } = useAuth();
@@ -16,19 +16,11 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   }, [loading, user, router]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoaderPinwheel className="size-8 animate-spin" />
-      </div>
-    );
+    return <UniversalPageLoader />;
   }
 
   if (!user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoaderPinwheel className="size-8 animate-spin" />
-      </div>
-    );
+    return <UniversalPageLoader />;
   }
   // If user is authenticated, render the children components
   return <>{children}</>;

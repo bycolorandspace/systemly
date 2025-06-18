@@ -30,37 +30,45 @@ export const CopyTradeData = (
     const data = () => {
       // Get list of items and map them to the desired format
 
-      if (list instanceof String || typeof list === "string") {
+      if (list !== undefined && typeof list === "string") {
         return `${list}`;
       } else {
-        return Object.entries(list ?? { "0": { title: "No data here" } }).map(
-          ([, listitem]) => {
-            return `${listitem.title}:  ${
-              listitem.description ? listitem.description : ""
-            }   ${listitem.data ? listitem.data : ""}`;
-          }
-        );
+        console.log("LIST DATA: ", list);
+        if (Object.entries(list).length === 1) {
+          return Object.values(list)[0];
+        } else {
+          return Object.entries(list ?? { "0": { title: "No data here" } }).map(
+            ([, listitem]) => {
+              return `${listitem.title}:  ${
+                listitem.description ? listitem.description : ""
+              }   ${listitem.data ? listitem.data : ""}`;
+            }
+          );
+        }
       }
     };
 
     const result = data();
-    const copyString = Array.isArray(result) ? result.join("\n") : result;
+
+    let copyString = "";
+    let copyData = { title: "", content: "" };
     const subject = `systemly.ai - Your ${title} Trade Data. God speed 🚀.`;
-    const copyData = {
-      title: subject,
-      content: copyString,
-    };
+    let finalCopyString = "";
+
+    if (Array.isArray(result)) {
+      copyString = result.join("\n");
+      copyData = {
+        title: subject,
+        content: copyString,
+      };
+      finalCopyString = `Title: ${copyData.title}\n\n${title}:\n${copyData.content}`;
+    } else {
+      finalCopyString = result.toString();
+    }
 
     navigator.clipboard
       // Create a new ClipboardItem with the text data and no json
-      .writeText(`Title: ${copyData.title}\n\nContent:\n${copyData.content}`)
-      .then(() => {
-        //Successfully copied to clipboard - SHOW TOAST
-        console.log(
-          "Trade data copied to clipboard successfully....",
-          copyData
-        );
-      })
+      .writeText(finalCopyString)
       .catch((error) => {
         // Failed to copy - SHOW TOAST
         return `Failed to copy trade data: ${error}`;

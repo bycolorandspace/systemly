@@ -4,6 +4,7 @@ import { TradePlan, UserInputs } from "@/types/trading/analysis";
 import { useCallback, useState } from "react";
 
 export function useGetAnalysisWithID() {
+  const [pnl, setPNL] = useState<number | null>(null);
   const [analysis, setAnalysis] = useState<TradePlan | null>(null);
   const [userInputs, setUserInputs] = useState<UserInputs | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -21,6 +22,7 @@ export function useGetAnalysisWithID() {
       if (response?.success) {
         setAnalysis(response.data ? response.data.trade_data : null);
         setUserInputs(response.data ? response.data.user_input : null);
+        setPNL(response.data ? response.data.pnl : null);
       } else {
         setError("No analysis found for the given ID");
         setAnalysis(null);
@@ -39,6 +41,7 @@ export function useGetAnalysisWithID() {
 
   return {
     getAnalysisWithID,
+    pnl,
     analysis,
     userInputs,
     error,

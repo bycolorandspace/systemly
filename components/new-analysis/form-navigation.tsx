@@ -16,7 +16,7 @@ export default function FormNavigation() {
           type="button"
           variant={"link"}
           onClick={prevQuestion}
-          className="rounded-full hover:text-accent-foreground hover:no-underline"
+          className="rounded-full hover:no-underline"
           hidden={stepIndex === 0 ? true : false}
         >
           Previous
@@ -24,14 +24,14 @@ export default function FormNavigation() {
         <Button
           type="button"
           onClick={nextQuestion}
-          className="rounded-full"
+          className="rounded-full cursor-pointer"
           hidden={stepIndex === totalSteps - 1 ? true : false}
         >
           Next
         </Button>
         <Button
           type="submit"
-          className="rounded-full"
+          className="rounded-full cursor-pointer"
           hidden={stepIndex !== totalSteps - 1 ? true : false}
           disabled={isDisabled}
         >

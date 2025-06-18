@@ -10,6 +10,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { updateUser } from "@/lib/userService";
 import { useAuth } from "@/contexts/auth-context";
+import { toast } from "sonner";
 
 interface FormLayoutProps {
   children: React.ReactNode;
@@ -54,16 +55,20 @@ export default function FormLayout({
       await updateLoading(true); // Set loading state to true
       const analysisId = crypto.randomUUID(); // Generate unique ID for this analysis
       router.push(`/analysis/${analysisId}`); // Start upload with the ID
+      // nextQuestion(); // Move to loading view
       if (!user) {
-        throw new Error(
-          "User is not authenticated. Cannot update user inputs."
-        );
+        toast.error(
+          "You must be logged in to submit a new analysis. Please log in or sign up."
+        ); // Show error message if user is not authenticated
       } else {
         // ONLY UPDATE USER INPUTS IF USER TICKS BOX --- ADD IN THE FORM !!!!!!!!!!!!!!!!
         await updateUser(user?.id, data.userInputs); // Update user inputs in the context
         await uploadFormData(data, analysisId); // Upload the form data with the generated ID
       }
     } catch (error) {
+      toast.error(
+        `An error occurred while submitting the form. Please try again. ${error}`
+      ); // Show error message if submission fails
       console.error("Error in form submission:", error); // Handle error (show error message, etc.)
     }
   };
@@ -81,6 +86,3 @@ export default function FormLayout({
     </div>
   );
 }
-
-// console.log("🔥 Generated analysis ID:", analysisId);  // Navigate immediately with the ID
-// console.log("🔥 About to navigate to:", `/analysis/${analysisId}`);
