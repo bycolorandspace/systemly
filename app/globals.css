@@ -128,4 +128,10 @@
   .icon {
     @apply border-border w-4 h-4;
   }
+  .tableLabel {
+    @apply font-medium text-secondary;
+  }
+  .tableData {
+    @apply font-normal text-primary;
+  }
 }

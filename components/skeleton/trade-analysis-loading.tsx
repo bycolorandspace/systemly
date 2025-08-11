@@ -12,7 +12,7 @@ export default function TradeAnalysisLoading() {
   return (
     <div className="w-full h-screen flex items-start justify-center max-w-7xl mx-auto">
       <TradeAnalysisProgress />
-      <div className=" w-full mx-auto px-6">
+      <div className=" w-full mx-auto px-6 py-6">
         <>
           <div className="w-full flex flex-row justify-between">
             <Skeleton className="w-full max-w-3xl  h-[20px] rounded-full" />

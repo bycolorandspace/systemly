@@ -1,6 +1,6 @@
 // app/api/analyze-chart/route.ts
 // import { getRandomPlaceholder } from "@/lib/trading/placeholder-user-input";
-import buildAnalysisPrompt from "@/lib/trading/trading-analysis-prompt";
+import { buildAnalysisPrompt } from "@/lib/prompts//trading-analysis-prompt";
 import { UserInputs } from "@/schema/trade-analysis-schema";
 import { NextResponse, NextRequest } from "next/server";
 import OpenAI from "openai";

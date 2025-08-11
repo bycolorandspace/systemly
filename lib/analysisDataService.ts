@@ -265,6 +265,43 @@ export async function getUserAnalysesByID(
   }
 }
 
+export async function DeleteAnalysisById(
+  analysisId: string
+): Promise<ServiceResponse<void>> {
+  if (!analysisId) {
+    return {
+      success: false,
+      error: "Analysis ID is required",
+    };
+  }
+
+  try {
+    const { error } = await supabase
+      .from("trade_analysis")
+      .delete()
+      .eq("id", analysisId);
+
+    if (error) {
+      return {
+        success: false,
+        error: error.message || "Error deleting analysis",
+      };
+    }
+    return {
+      success: true,
+      data: undefined, // No data to return on success
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Unexpected error while deleting analysis",
+    };
+  }
+}
+
 // export async function updateUser(
 //   userId: string,
 //   userInput: UserInputs

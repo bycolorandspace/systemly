@@ -4,8 +4,10 @@ import * as React from "react";
 import {
   BookOpen,
   Bot,
+  BriefcaseMedical,
   Command,
   Frame,
+  HospitalIcon,
   LifeBuoy,
   Map,
   PieChart,
@@ -51,10 +53,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: SquareTerminal,
       },
       {
-        name: "Community ideas",
-        url: "#",
-        icon: Map,
+        name: "Risk doctor",
+        url: "/risk-doctor",
+        icon: BriefcaseMedical,
       },
+      // {
+      //   name: "Community ideas",
+      //   url: "#",
+      //   icon: Map,
+      // },
     ],
   };
 

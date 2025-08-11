@@ -55,11 +55,11 @@ export default function TradeTechnicals({ data }: { data: TradePlan | null }) {
   ];
 
   return (
-    <div className="space-y-6">
-      <p className="max-w-xl">{data?.technical.technicalSummary.reasoning}</p>
+    <div className="space-y-6 mb-8">
+      <p className="max-w-2xl">{data?.technical.technicalSummary.reasoning}</p>
       <Accordion type="single" collapsible={true} className="w-full space-y-4 ">
         {/* Put trade analysis box in a grid layout*/}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           {tradeAnalysisContent.map((item, index) => {
             return (
               <TradeTechnicalContent

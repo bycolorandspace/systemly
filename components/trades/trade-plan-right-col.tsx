@@ -48,7 +48,7 @@ export default function TradePlanRightCol({
                 <TabsTrigger
                   key={item.value}
                   value={item.value}
-                  className="data-[state=active]:bg-sidebar rounded-full cursor-pointer"
+                  className="data-[state=active]:bg-card rounded-full cursor-pointer"
                 >
                   {item.title}
                 </TabsTrigger>

@@ -11,8 +11,8 @@ export default function TradeAnalysisList({ list }: AnalysisProps) {
             >
               {item.title ? (
                 <div className="flex flex-col justify-start">
-                  <h3 className="font-bold text-secondary">{item.title}</h3>
-                  <p>{item.description}</p>
+                  <h3 className="tableLabel">{item.title}</h3>
+                  <p className="tableData">{item.description}</p>
                 </div>
               ) : (
                 <span> No data available </span>

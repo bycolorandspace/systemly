@@ -59,7 +59,7 @@ export default function FilterSelector({
           <SelectItem
             key={query.value}
             value={query.value}
-            className="text-primary bg-transparent hover:bg-secondary hover:text-card"
+            className="text-secondary bg-transparent hover:bg-secondary hover:text-card"
           >
             {query.label}
           </SelectItem>

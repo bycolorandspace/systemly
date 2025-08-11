@@ -1,6 +1,8 @@
 "use client";
 import LogoutButton from "@/components/auth/buttons/logout-button";
 import Logo from "@/components/common/logo";
+import FloatingDollarsBackground from "@/components/FloatingDollars";
+// import FloatingDollars from "@/components/FloatingDollars";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
 import Router from "next/navigation";
@@ -17,6 +19,12 @@ export default function Home() {
 
   return (
     <>
+      <FloatingDollarsBackground
+        showControls={true}
+        initialDollarCount={50}
+        initialFallSpeed={1.5}
+        initialWindStrength={0.8}
+      />
       <div className="flex flex-col items-center justify-center min-h-screen">
         <Logo />
         {isAuthenticated ? (
